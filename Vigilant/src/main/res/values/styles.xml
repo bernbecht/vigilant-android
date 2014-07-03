@@ -1,0 +1,29 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="VigilantTheme"
+        parent="@android:style/Theme.Holo.Light.DarkActionBar">
+        <item name="android:actionBarStyle">@style/VigilantActionBar</item>
+    </style>
+
+    <!-- ActionBar styles -->
+    <style name="VigilantActionBar"
+        parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@color/red_medium</item>
+    </style>
+
+
+    <style name="VigilantSplitActionBar">
+        <item name="android:paddingTop">5dip</item>
+        <item name="android:paddingBottom">1dip</item>
+        <item name="android:background">@color/red_medium_80</item>
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+
+
+</resources>

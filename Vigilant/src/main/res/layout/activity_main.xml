@@ -1,0 +1,53 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity" >
+    <fragment
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        class="com.google.android.gms.maps.MapFragment" />
+
+    <LinearLayout android:id="@+id/footer"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        style="@style/VigilantSplitActionBar"
+        >
+
+
+        <ImageButton
+            android:id="@+id/list_problem_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_menu_list_problem"
+            android:layout_weight="1"
+            style="?android:attr/borderlessButtonStyle"
+            android:onClick="changeListActivity"
+            />
+
+        <ImageButton
+            android:id="@+id/add_report_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_menu_add_report"
+            android:layout_weight="1"
+            style="?android:attr/borderlessButtonStyle"
+            />
+
+        <ImageButton
+            android:id="@+id/user_profile_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_menu_user_profile"
+            android:layout_weight="1"
+            style="?android:attr/borderlessButtonStyle"
+            />
+
+
+
+    </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Vigilant/Vigilant.iml" filepath="$PROJECT_DIR$/Vigilant/Vigilant.iml" />
+      <module fileurl="file://$PROJECT_DIR$/VigilantProject.iml" filepath="$PROJECT_DIR$/VigilantProject.iml" />
+    </modules>
+  </component>
+</project>
+

@@ -13,15 +13,19 @@
     <!-- ActionBar styles -->
     <style name="VigilantActionBar"
         parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@color/red_medium</item>
+        <item name="android:background">@drawable/action_bar</item>
     </style>
 
 
-    <style name="VigilantSplitActionBar">
+    <style name="SplitActionBar_Vigilant">
         <item name="android:paddingTop">5dip</item>
         <item name="android:paddingBottom">1dip</item>
         <item name="android:background">@color/red_medium_80</item>
         <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <style name="SplitActionBar_ButtonText_Vigilant">
+        <item name="android:textColor">@color/white</item>
     </style>
 
 

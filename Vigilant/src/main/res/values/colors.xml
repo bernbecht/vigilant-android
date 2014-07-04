@@ -5,4 +5,7 @@
     <color name="red_dark_80">#CCA33736</color>
     <color name="red_medium">#ef504f</color>
     <color name="red_medium_80">#ccef504f</color>
+
+    <color name="white">#FFF</color>
+
 </resources>

@@ -6,6 +6,10 @@
     <color name="red_medium">#ef504f</color>
     <color name="red_medium_80">#ccef504f</color>
 
+    <color name="green_medium">#006C37</color>
+    <color name="green_dark">#00532A</color>
+
+
     <color name="white">#FFF</color>
 
 </resources>

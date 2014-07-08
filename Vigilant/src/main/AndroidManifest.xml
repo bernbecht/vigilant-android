@@ -82,6 +82,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.br.vigilant.ProfileActivity" />
         </activity>
+        <activity
+            android:name="com.br.vigilant.AddReportActivity"
+            android:label="@string/title_activity_add_report"
+            android:parentActivityName="com.br.vigilant.MapActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.br.vigilant.MapActivity" />
+        </activity>
 
 
 

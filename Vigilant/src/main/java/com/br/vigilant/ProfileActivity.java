@@ -9,8 +9,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.br.adapter.AdapterSettingsAuxProfile;
-import com.br.adapter.AdapterSettingsProfile;
+import com.br.adapter.AdapterProfileSettingsAuxList;
+import com.br.adapter.AdapterProfileSettingsList;
 
 public class ProfileActivity extends Activity {
 
@@ -30,8 +30,8 @@ public class ProfileActivity extends Activity {
 
         String[] values1 = new String[]{"Change email", "Change password", "Change city"};
         String[] values2 = new String[]{"Logout"};
-        AdapterSettingsProfile adapter1 = new AdapterSettingsProfile(this, values1);
-        AdapterSettingsAuxProfile adapter2 = new AdapterSettingsAuxProfile(this, values2);
+        AdapterProfileSettingsList adapter1 = new AdapterProfileSettingsList(this, values1);
+        AdapterProfileSettingsAuxList adapter2 = new AdapterProfileSettingsAuxList(this, values2);
 
         l1.setAdapter(adapter1);
         l2.setAdapter(adapter2);

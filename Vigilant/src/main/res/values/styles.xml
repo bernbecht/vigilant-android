@@ -50,6 +50,33 @@
         <item name="android:layout_marginBottom">7dp</item>
     </style>
 
+    <style name="EditText_canvas_vigilant">
+        <item name="android:layout_marginLeft">@dimen/vigilant_object_horizontal_margin_root_layout</item>
+        <item name="android:layout_marginRight">@dimen/vigilant_object_horizontal_margin_root_layout</item>
+        <item name="android:layout_marginTop">@dimen/vigilant_object_vertical_margin_root_layout</item>
+        <item name="android:layout_marginBottom">@dimen/vigilant_object_vertical_margin_root_layout</item>
+        <item name="android:padding">@dimen/vigilant_object_padding_default</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:paddingBottom">0dp</item>
+    </style>
+
+    <style name="EditText_vigilant">
+        <item name="android:singleLine">true</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+
+    <style name="TextArea_canvas_vigilant">
+        <item name="android:layout_marginLeft">@dimen/vigilant_object_horizontal_margin_root_layout</item>
+        <item name="android:layout_marginRight">@dimen/vigilant_object_horizontal_margin_root_layout</item>
+        <item name="android:layout_marginTop">@dimen/vigilant_object_vertical_margin_root_layout</item>
+        <item name="android:layout_marginBottom">@dimen/vigilant_object_vertical_margin_root_layout</item>
+        <item name="android:padding">@dimen/vigilant_object_padding_default</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:paddingBottom">0dp</item>
+    </style>
+
+
 
 
 </resources>

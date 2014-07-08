@@ -14,5 +14,6 @@
     <string name="edit_password_hint">Type your new password</string>
     <string name="edit_password_retype_hint">Re-type your password</string>
     <string name="title_activity_edit_city">EditCity</string>
+    <string name="title_activity_add_report">AddReport</string>
 
 </resources>

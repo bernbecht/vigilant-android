@@ -15,22 +15,26 @@ public class MapActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-       mapInit();
-
+        mapInit();
 
     }
 
-    public void changeListActivity(View view){
+    public void changeListActivity(View view) {
         Intent intent = new Intent(this, Map2.class);
         startActivity(intent);
     }
 
-    public void changeProfileActivity(View view){
+    public void changeProfileActivity(View view) {
         Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
     }
 
-    public GoogleMap mapInit(){
+    public void changeAddReportActivity(View view) {
+        Intent intent = new Intent(this, AddReportActivity.class);
+        startActivity(intent);
+    }
+
+    public GoogleMap mapInit() {
         GoogleMap map = ((MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map)).getMap();
 
@@ -39,5 +43,5 @@ public class MapActivity extends Activity {
         return map;
     }
 
-   }
+}
 

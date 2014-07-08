@@ -34,7 +34,8 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_menu_add_report"
             android:layout_weight="1"
-            style="?android:attr/borderlessButtonStyle" />
+            style="?android:attr/borderlessButtonStyle"
+            android:onClick="changeAddReportActivity" />
 
         <ImageButton
             android:id="@+id/user_profile_button"

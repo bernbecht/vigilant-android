@@ -45,6 +45,7 @@
             android:src="@drawable/ic_menu_user_profile"
             android:layout_weight="1"
             style="?android:attr/borderlessButtonStyle"
+            android:onClick="changeProfileActivity"
             />
 
 

@@ -1,0 +1,82 @@
+<LinearLayout
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/LayoutBackground_Vigilant">
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:orientation="vertical"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="20dp">
+
+        <ImageView
+            android:id="@+id/image_profile"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/profile" />
+
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_marginLeft="10dp"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/username_profile"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:text="Berhell"
+                android:gravity="center"
+                android:textSize="22dp"
+                android:textColor="#0071BC" />
+
+            <TextView
+                android:id="@+id/email_profile"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:gravity="center"
+                android:text="berzuca@msn.com"
+                android:textSize="17dp" />
+
+            <TextView
+                android:id="@+id/city_profile"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:gravity="center"
+                android:text="Ponta Grossa - PR | User since 21/09/1990"
+                android:textSize="13dp"
+                android:textColor="#808080" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        android:orientation="vertical">
+
+        <ListView
+            android:layout_marginTop="15dp"
+            android:id="@+id/list1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="false" />
+
+        <ListView
+            android:layout_marginTop="20dp"
+            android:id="@+id/list2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="false" />
+    </LinearLayout>
+
+
+</LinearLayout>

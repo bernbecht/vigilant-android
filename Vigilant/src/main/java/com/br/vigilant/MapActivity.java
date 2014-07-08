@@ -8,7 +8,7 @@ import android.view.View;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 
-public class MainActivity extends Activity {
+public class MapActivity extends Activity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -22,6 +22,11 @@ public class MainActivity extends Activity {
 
     public void changeListActivity(View view){
         Intent intent = new Intent(this, Map2.class);
+        startActivity(intent);
+    }
+
+    public void changeProfileActivity(View view){
+        Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
     }
 

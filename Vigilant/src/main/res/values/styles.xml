@@ -21,7 +21,7 @@
     <style name="SplitActionBar_Vigilant">
         <item name="android:paddingTop">5dip</item>
         <item name="android:paddingBottom">1dip</item>
-        <item name="android:background">@color/red_medium_80</item>
+        <item name="android:background">@color/red_dark_80</item>
         <item name="android:textColor">#FFFFFF</item>
     </style>
 

@@ -15,5 +15,9 @@
     <string name="edit_password_retype_hint">Re-type your password</string>
     <string name="title_activity_edit_city">EditCity</string>
     <string name="title_activity_add_report">AddReport</string>
+    <string name="title_activity_login">Login</string>
+    <string name="login_action">Log in</string>
+    <string name="login_observation_title">Don\'t worry</string>
+    <string name="login_observation_text">Your personal data won\'t be visible for other people</string>
 
 </resources>

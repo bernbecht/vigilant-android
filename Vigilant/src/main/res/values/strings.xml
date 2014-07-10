@@ -19,5 +19,9 @@
     <string name="login_action">Log in</string>
     <string name="login_observation_title">Don\'t worry</string>
     <string name="login_observation_text">Your personal data won\'t be visible for other people</string>
+    <string name="title_activity_create_profile">CreateProfile</string>
+    <string name="terms_condition_text">Clicking on Create button means you agree with</string>
+    <string name="terms_condition">Terms and Conditions</string>
+    <string name="create_text_button">Create</string>
 
 </resources>

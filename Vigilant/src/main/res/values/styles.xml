@@ -63,6 +63,7 @@
     <style name="EditText_vigilant">
         <item name="android:singleLine">true</item>
         <item name="android:textSize">15sp</item>
+        <item name="android:background">#00000000</item>
     </style>
 
 

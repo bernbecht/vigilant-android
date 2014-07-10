@@ -20,17 +20,17 @@ public class LoginActivity extends Activity {
     }
 
     public void facebookLogin(View view) {
-        Intent intent = new Intent(this, MapActivity.class);
+        Intent intent = new Intent(this, CreateProfileActivity.class);
         startActivity(intent);
     }
 
     public void twitterLogin(View view) {
-        Intent intent = new Intent(this, MapActivity.class);
+        Intent intent = new Intent(this, CreateProfileActivity.class);
         startActivity(intent);
     }
 
     public void googleLogin(View view) {
-        Intent intent = new Intent(this, MapActivity.class);
+        Intent intent = new Intent(this, CreateProfileActivity.class);
         startActivity(intent);
     }
 }

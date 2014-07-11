@@ -65,6 +65,18 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.br.vigilant.LoginActivity" />
             </activity>
+
+        <activity
+            android:name="com.br.vigilant.ReportDescriptionActivity"
+            android:label="@string/app_name"
+            android:parentActivityName="com.br.vigilant.MapActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.br.vigilant.MapActivity" />
+        </activity>
+
         <activity
             android:name="com.br.vigilant.Map2"
             android:label="@string/title_activity_map2"

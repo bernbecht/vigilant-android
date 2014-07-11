@@ -77,6 +77,12 @@
         <item name="android:paddingBottom">0dp</item>
     </style>
 
+    <style name="address_canvas">
+        <item name="android:background">@color/gray_medium</item>
+        <item name="android:layout_marginTop">@dimen/activity_vertical_margin</item>
+        <item name="android:layout_marginBottom">3dp</item>
+    </style>
+
 
 
 

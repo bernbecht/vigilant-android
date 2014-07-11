@@ -9,6 +9,9 @@
     <color name="green_medium">#006C37</color>
     <color name="green_dark">#00532A</color>
 
+    <color name="gray_dark">#828282</color>
+    <color name="gray_medium">#B8B8B8</color>
+
 
     <color name="white">#FFF</color>
 

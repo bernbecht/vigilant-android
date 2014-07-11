@@ -26,12 +26,6 @@ public class AddReportActivity extends Activity {
     }
 
     public void categoryButtonClicked(View view) {
-//        Context context = getApplicationContext();
-//        CharSequence text = "Categories";
-//        int duration = Toast.LENGTH_SHORT;
-//
-//        Toast toast = Toast.makeText(context, text, duration);
-//        toast.show();
 
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(
                 this);

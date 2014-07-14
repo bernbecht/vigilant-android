@@ -210,6 +210,19 @@
                     android:layout_marginRight="@dimen/vigilant_object_horizontal_margin_root_layout"
                     android:layout_marginBottom="@dimen/vigilant_object_vertical_margin_root_layout" />
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="..."
+                    android:layout_gravity="right"
+                    android:layout_marginRight="@dimen/vigilant_object_horizontal_margin_root_layout" />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

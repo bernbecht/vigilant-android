@@ -15,16 +15,19 @@ repositories {
 android {
     compileSdkVersion 19
     buildToolsVersion '19.1.0'
-
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 19
     }
+    productFlavors {
+    }
+    buildTypes {
+    }
 }
 
 dependencies {
-
     compile 'com.google.android.gms:play-services:4.4.52'
     compile 'com.android.support:support-v4:19.0.+'
     compile 'com.android.support:appcompat-v7:19.0.+'
+    compile project(':facebook')
 }

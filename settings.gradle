@@ -1,1 +1,1 @@
-include ':Vigilant'
+include ':Vigilant', ':facebook'

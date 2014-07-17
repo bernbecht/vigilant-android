@@ -3,7 +3,9 @@ package com.br.vigilant;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -11,10 +13,13 @@ import android.widget.Toast;
 
 import com.br.adapter.AdapterProfileSettingsAuxList;
 import com.br.adapter.AdapterProfileSettingsList;
+import com.facebook.Session;
 
 public class ProfileActivity extends Activity {
 
     private static Context context;
+
+    public static final String ACTIVITY_TAG = "ProfileActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,15 +69,29 @@ public class ProfileActivity extends Activity {
         public void onItemClick(AdapterView parent, View v, int position, long id) {
 
             if (position == 0) {
-                Context context = getApplicationContext();
-                CharSequence text = "Logout";
-                int duration = Toast.LENGTH_SHORT;
+                logout();
 
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
+                Intent intent = new Intent(ProfileActivity.context, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
             }
         }
     };
+
+    private boolean logout(){
+        Session session = Session.getActiveSession();
+        Log.i(ACTIVITY_TAG,"face session: "+session);
+        if(session != null){
+            session.closeAndClearTokenInformation();
+        }
+        SharedPreferences settings = getSharedPreferences(MapActivity.PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean("logged", false);
+        // Commit the edits!
+        editor.commit();
+
+        return true;
+    }
 
 
 }

@@ -3,6 +3,7 @@ package com.br.vigilant;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
@@ -17,21 +18,46 @@ public class MapActivity extends Activity {
 
     private static Context context;
 
+    public static final String PREFS_NAME = "VigilantPrefs";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map);
 
-        MapActivity.context = getApplicationContext();
 
-        mapInit();
+            setContentView(R.layout.activity_map);
 
+            MapActivity.context = getApplicationContext();
+
+            mapInit();
+
+//        if(!isLogged()){
+//            Intent intent = new Intent(MapActivity.context, LoginActivity.class);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            startActivity(intent);
+//        }
+    }
+
+    public boolean isLogged(){
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        return settings.getBoolean("logged", false);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+//        onResume(!isLogged()){
+//            Intent intent = new Intent(MapActivity.context, LoginActivity.class);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            startActivity(intent);
+//        }
     }
 
     public void changeListActivity(View view) {
         Intent intent = new Intent(this, Map2.class);
         startActivity(intent);
     }
+
 
     public void changeProfileActivity(View view) {
         Intent intent = new Intent(this, ProfileActivity.class);

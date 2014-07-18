@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Vigilant/Vigilant.iml" filepath="$PROJECT_DIR$/Vigilant/Vigilant.iml" />
       <module fileurl="file://$PROJECT_DIR$/VigilantProject.iml" filepath="$PROJECT_DIR$/VigilantProject.iml" />
+      <module fileurl="file://$PROJECT_DIR$/facebook/facebook.iml" filepath="$PROJECT_DIR$/facebook/facebook.iml" />
     </modules>
   </component>
 </project>

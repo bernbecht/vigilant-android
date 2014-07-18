@@ -1,18 +1,15 @@
 package com.br.vigilant;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 
-import com.br.fragment.LoginFragment;
+
+import com.br.SharedPreferencesManager;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
@@ -21,7 +18,6 @@ import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 
-import java.util.Map;
 
 /**
  * Created by Berhell on 09/07/14.
@@ -36,7 +32,7 @@ public class LoginActivity extends FragmentActivity {
 
     private UiLifecycleHelper uiHelper;
 
-
+    //Link the function after the request
     private Session.StatusCallback callback =
             new Session.StatusCallback() {
                 @Override
@@ -50,18 +46,13 @@ public class LoginActivity extends FragmentActivity {
         // Only make changes if the activity is visible
         if (isResumed) {
 
-            Log.i(ACTIVITY_TAG,"login face session"+ session);
+            Log.i(ACTIVITY_TAG, "login face session" + session);
 
             if (session != null && state.isOpened()) {
-
-                SharedPreferences settings = getSharedPreferences(MapActivity.PREFS_NAME, 0);
-                SharedPreferences.Editor editor = settings.edit();
-                editor.putBoolean("logged", true);
-                // Commit the edits!
-                editor.commit();
-
+                SharedPreferencesManager.setIsLogged(LoginActivity.context, true);
                 if (!checkIsUserOnServer()) {
                     Intent intent = new Intent(LoginActivity.context, CreateProfileActivity.class);
+                    //make the previous this activity out of backstack
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 } else {
@@ -69,13 +60,13 @@ public class LoginActivity extends FragmentActivity {
                     startActivity(intent);
                 }
 
-
-
             } else if (state.isClosed()) {
             }
         }
     }
 
+    //check if there is an user with this credentials registered in our server
+    // if not, put the user to create a nickname
     private boolean checkIsUserOnServer() {
         return false;
     }
@@ -93,15 +84,12 @@ public class LoginActivity extends FragmentActivity {
 
         setContentView(R.layout.activity_login);
 
-        LoginButton button = (LoginButton) findViewById(R.id.login_facebook_button);
+        //Change the Facebook' button background
+//        LoginButton button = (LoginButton) findViewById(R.id.login_facebook_button);
+//        button.setBackgroundResource(R.drawable.ic_facebook_login);
+//        button.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 
-        button.setBackgroundResource(R.drawable.ic_facebook_login);
-        button.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
-
-        Log.d(ACTIVITY_TAG, "button: "+ button);
-
-
-
+//        Log.d(ACTIVITY_TAG, "button: " + button);
     }
 
 

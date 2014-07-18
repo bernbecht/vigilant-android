@@ -30,27 +30,11 @@ public class MapActivity extends Activity {
             MapActivity.context = getApplicationContext();
 
             mapInit();
-
-//        if(!isLogged()){
-//            Intent intent = new Intent(MapActivity.context, LoginActivity.class);
-//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//            startActivity(intent);
-//        }
-    }
-
-    public boolean isLogged(){
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        return settings.getBoolean("logged", false);
     }
 
     @Override
     public void onResume(){
         super.onResume();
-//        onResume(!isLogged()){
-//            Intent intent = new Intent(MapActivity.context, LoginActivity.class);
-//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//            startActivity(intent);
-//        }
     }
 
     public void changeListActivity(View view) {

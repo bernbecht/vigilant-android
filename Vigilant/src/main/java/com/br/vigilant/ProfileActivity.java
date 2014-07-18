@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.br.SharedPreferencesManager;
 import com.br.adapter.AdapterProfileSettingsAuxList;
 import com.br.adapter.AdapterProfileSettingsList;
 import com.facebook.Session;
@@ -78,18 +79,15 @@ public class ProfileActivity extends Activity {
         }
     };
 
-    private boolean logout(){
+    private boolean logout() {
         Session session = Session.getActiveSession();
-        Log.i(ACTIVITY_TAG,"face session: "+session);
-        if(session != null){
+        Log.i(ACTIVITY_TAG, "face -- logout clicked -- session: " + session);
+        if (session != null) {
             session.closeAndClearTokenInformation();
+            Log.i(ACTIVITY_TAG, "face -- pos logout -- session: " + session);
         }
-        SharedPreferences settings = getSharedPreferences(MapActivity.PREFS_NAME, 0);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putBoolean("logged", false);
-        // Commit the edits!
-        editor.commit();
-
+        SharedPreferencesManager.setIsLogged(ProfileActivity.context, false);
+        Log.i(ACTIVITY_TAG, "shared preference logged " + SharedPreferencesManager.isLogged(ProfileActivity.context));
         return true;
     }
 

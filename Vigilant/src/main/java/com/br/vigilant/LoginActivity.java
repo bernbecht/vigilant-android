@@ -17,6 +17,9 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
+import com.parse.Parse;
+import com.parse.ParseAnalytics;
+import com.parse.ParseObject;
 
 
 /**
@@ -75,6 +78,12 @@ public class LoginActivity extends FragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        Parse.initialize(this, "iYqmrHJxkjaJNQAwRjkBu2QyXM0nYvNOJMOljLrO", "K3slw23JivOvFirBErTvyVf7da5wLmxBkPkrUmYx");
+
+        ParseObject testObject = new ParseObject("TestObject");
+        testObject.put("foo", "bar");
+        testObject.saveInBackground();
 
         LoginActivity.context = getApplicationContext();
 

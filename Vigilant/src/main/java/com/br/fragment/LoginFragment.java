@@ -30,10 +30,11 @@ public class LoginFragment extends Fragment {
 
 
 
-
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
-
+//        LoginButton authButton = (LoginButton) view.findViewById(R.id.login_facebook_button);
+//        authButton.setFragment(this);
+//        authButton.setReadPermissions(Arrays.asList("user_location", "user_birthday", "user_likes"));
 
         return view;
     }

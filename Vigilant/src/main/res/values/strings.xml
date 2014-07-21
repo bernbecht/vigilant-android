@@ -29,8 +29,7 @@
     <string name="mock_username">Berhell</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="button_login_facebook">Enter with Facebook</string>
-
-
     <string name="app_id">146714232165859</string>
+    <string name="title_activity_user_parse_store">UserParseStore</string>
 
 </resources>

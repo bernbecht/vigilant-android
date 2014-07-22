@@ -31,7 +31,7 @@
             android:orientation="horizontal">
 
 
-            <com.facebook.widget.LoginButton
+            <Button
                 xmlns:fb="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/login_facebook_button"
                 android:layout_height="wrap_content"
@@ -40,9 +40,10 @@
                 android:layout_gravity="center"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"
-                android:src="@drawable/ic_facebook_login"
-                fb:login_text="@string/button_login_facebook"
-                fb:logout_text=""/>
+                android:background="@drawable/button_facebook_login"
+                android:onClick=""
+                android:text="Enter with Facebook"
+                android:textColor="@color/white"/>
 
         </LinearLayout>
         <LinearLayout

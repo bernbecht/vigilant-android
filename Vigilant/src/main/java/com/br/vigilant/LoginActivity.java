@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 
 import com.br.SharedPreferencesManager;
@@ -46,67 +47,99 @@ public class LoginActivity extends FragmentActivity {
 
     private final String ACTIVITY_TAG = "LoginActivity";
 
-    private boolean isResumed = false;
 
-    private UiLifecycleHelper uiHelper;
-
-    private static GraphUser fb_user;
-
-    public static ParseObject parseUser;
+    private static GraphUser fb_user = null;
 
 
-    //    //Link the function after the request
-    private Session.StatusCallback callback =
-            new Session.StatusCallback() {
-                @Override
-                public void call(Session session,
-                                 SessionState state, Exception exception) {
-                    onSessionStateChange(session, state, exception);
-                }
-            };
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-    //callback from clicking FB button
-    private void onSessionStateChange(Session session, SessionState state, Exception exception) {
-        // Only make changes if the activity is visible
-        if (isResumed) {
-            if (session != null && state.isOpened()) {
-
-                SharedPreferencesManager.setIsLogged(LoginActivity.context, true);
-
-                makeRequest(session);
+        Parse.initialize(this, "zmCTLzchKlxqd3r9ygqYZZYaQwKyzgpvTPhEtO5e", "sktKbehLkB8ukPjTHnVYeYg3kRVPicvviZXQC1kJ");
 
 
-            } else if (state.isClosed()) {
+        ParseFacebookUtils.initialize("684872108258145");
+
+        LoginActivity.context = getApplicationContext();
+
+        setContentView(R.layout.activity_login);
+
+        Button loginButton = (Button) findViewById(R.id.login_facebook_button);
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onLoginButtonClicked();
             }
+        });
+
+        //TODO check the nickname too
+        if(ParseUser.getCurrentUser() != null ){
+            Intent intent = new Intent(LoginActivity.context, MapActivity.class);
+            //make the previous this activity out of backstack
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
         }
+
     }
 
+    private void onLoginButtonClicked() {
+        List<String> permissions = Arrays.asList("user_location", "user_birthday", "user_likes", "email");
+        ParseFacebookUtils.logIn(permissions, this, new LogInCallback() {
+            @Override
+            public void done(ParseUser user, ParseException err) {
+                if (user == null) {
+                    Log.d(ACTIVITY_TAG,
+                            "Uh oh. The user cancelled the Facebook login." + user);
+                } else if (user.isNew()) {
+                    Log.d(ACTIVITY_TAG,
+                            "User signed up and logged in through Facebook!" + user);
 
-    //check if there is an user with this credentials registered in our server
-    // if not, register user on PARSE
-    private void checkUserOnServerOnLogin() {
+                    Request request = Request.newMeRequest(ParseFacebookUtils.getSession(), new Request.GraphUserCallback() {
+                        @Override
+                        public void onCompleted(GraphUser user, Response response) {
+                            // If the response is successful
 
-        ParseQuery<ParseObject> userExits = ParseQuery.getQuery("User");
-        userExits.whereEqualTo("facebookId", fb_user.getId());
+                            if (user != null) {
 
-        List<ParseQuery<ParseObject>> queries = new ArrayList<ParseQuery<ParseObject>>();
-        queries.add(userExits);
+                                LoginActivity.fb_user = user;
 
-        ParseQuery<ParseObject> mainQuery = ParseQuery.or(queries);
-        mainQuery.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> results, ParseException e) {
-                if (!results.isEmpty()) {
-                    Log.i(ACTIVITY_TAG, "user existe");
-                    Log.i(ACTIVITY_TAG, "user ID: " + results.get(0).getObjectId());
-                    parseUser = results.get(0);
+                                Log.d(ACTIVITY_TAG, "user facebook " + user);
+                                Log.d(ACTIVITY_TAG, "user id: " + user.getId());
+                                Log.d(ACTIVITY_TAG, "Current user id: " + ParseUser.getCurrentUser().getObjectId());
 
-                    if (parseUser.get("nickname") == null) {
+                                ParseObject new_user = ParseUser.getCurrentUser();
+
+                                new_user.put("email", fb_user.asMap().get("email"));
+                                new_user.put("firstName", fb_user.getFirstName());
+                                new_user.put("lastName", fb_user.getLastName());
+                                new_user.put("facebookId", fb_user.getId());
+                                new_user.put("location", fb_user.getLocation().getProperty("name"));
+                                new_user.put("gender", fb_user.asMap().get("gender"));
+
+                                new_user.saveInBackground();
+
+                            }
+                        }
+                    });
+                    Request.executeBatchAsync(request);
+
+
+                    Intent intent = new Intent(LoginActivity.context, CreateProfileActivity.class);
+                    //make the previous this activity out of backstack
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+
+                } else {
+                    Log.d(ACTIVITY_TAG,
+                            "User logged in through Facebook! " + user.getObjectId() + " " + user.isNew());
+                    Log.d(ACTIVITY_TAG,
+                            "Current user " + ParseUser.getCurrentUser());
+
+                    if (user.get("nickname") == null) {
                         Intent intent = new Intent(LoginActivity.context, CreateProfileActivity.class);
                         //make the previous this activity out of backstack
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
-
-
                     } else {
                         Intent intent = new Intent(LoginActivity.context, MapActivity.class);
                         //make the previous this activity out of backstack
@@ -114,136 +147,35 @@ public class LoginActivity extends FragmentActivity {
                         startActivity(intent);
                     }
 
-                } else {
-                    Log.i(ACTIVITY_TAG, "user NAO existe");
-                    Log.i(ACTIVITY_TAG, "Salvando user...");
-                    ParseObject newUser = new ParseObject("User");
-                    newUser.put("facebookId", fb_user.getId());
-                    newUser.put("email", fb_user.asMap().get("email"));
-                    newUser.put("firstName", fb_user.getFirstName());
-                    newUser.put("lastName", fb_user.getLastName());
-                    newUser.saveInBackground();
-                    parseUser = newUser;
                 }
             }
         });
     }
-
-    private void makeRequest(final Session session) {
-        Request request = Request.newMeRequest(session, new Request.GraphUserCallback() {
-            @Override
-            public void onCompleted(GraphUser user, Response response) {
-                // If the response is successful
-
-                if (user != null) {
-                    Log.d(ACTIVITY_TAG, "user " + user);
-                    LoginActivity.fb_user = user;
-                    Log.d(ACTIVITY_TAG, "user email: " + user.getId());
-
-                    checkUserOnServerOnLogin();
-                }
-            }
-        });
-        Request.executeBatchAsync(request);
-
-
-    }
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        Parse.initialize(this, "iYqmrHJxkjaJNQAwRjkBu2QyXM0nYvNOJMOljLrO", "K3slw23JivOvFirBErTvyVf7da5wLmxBkPkrUmYx");
-
-
-        LoginActivity.context = getApplicationContext();
-
-        uiHelper = new UiLifecycleHelper(this, callback);
-
-        uiHelper.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_login);
-
-        LoginButton authButton = (LoginButton) findViewById(R.id.login_facebook_button);
-        authButton.setReadPermissions(Arrays.asList("user_location", "user_birthday", "user_likes", "email"));
-
-        //Change the Facebook' button background
-//        LoginButton button = (LoginButton) findViewById(R.id.login_facebook_button);
-//        button.setBackgroundResource(R.drawable.ic_facebook_login);
-//        button.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-
-//        Log.d(ACTIVITY_TAG, "button: " + button);
-    }
-
 
     @Override
     public void onResume() {
         super.onResume();
-        uiHelper.onResume();
-        isResumed = true;
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        uiHelper.onPause();
-        isResumed = false;
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        uiHelper.onActivityResult(requestCode, resultCode, data);
+        ParseFacebookUtils.finishAuthentication(requestCode, resultCode, data);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        uiHelper.onDestroy();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        uiHelper.onSaveInstanceState(outState);
     }
 
-    public void facebookLogin(View view) {
-
-        Log.d(ACTIVITY_TAG, "function facebookLogin");
-
-        Session.openActiveSession(this, true, new Session.StatusCallback() {
-
-            // callback when session changes state
-            @Override
-            public void call(Session session, SessionState state, Exception exception) {
-                if (session.isOpened()) {
-
-                    // make request to the /me API
-                    Request.newMeRequest(session, new Request.GraphUserCallback() {
-
-                        // callback after Graph API response with user object
-                        @Override
-                        public void onCompleted(GraphUser user, Response response) {
-                            if (user != null) {
-                                Intent intent = new Intent(context, CreateProfileActivity.class);
-                                startActivity(intent);
-                            }
-                        }
-                    }).executeAsync();
-                }
-            }
-        });
-    }
-
-    public void twitterLogin(View view) {
-        Intent intent = new Intent(this, CreateProfileActivity.class);
-        startActivity(intent);
-    }
-
-    public void googleLogin(View view) {
-        Intent intent = new Intent(this, CreateProfileActivity.class);
-        startActivity(intent);
-    }
 }

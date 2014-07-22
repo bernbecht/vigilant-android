@@ -18,8 +18,7 @@
             android:id="@+id/address_report_input_edittext"
             android:layout_height="fill_parent"
             android:layout_width="fill_parent"
-            android:hint="Brigadeiro Rocha Loures, 251"
-            style="@style/EditText_vigilant" />
+            android:hint="Brigadeiro Rocha Loures, 251" />
     </LinearLayout>
 
     <ImageView

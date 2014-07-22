@@ -31,5 +31,7 @@
     <string name="button_login_facebook">Enter with Facebook</string>
     <string name="app_id">146714232165859</string>
     <string name="title_activity_user_parse_store">UserParseStore</string>
+    <string name="create_profile__header_text">New Vigilant</string>
+    <string name="create_profile__info_nickname">This nickname will be shown instead of your name</string>
 
 </resources>

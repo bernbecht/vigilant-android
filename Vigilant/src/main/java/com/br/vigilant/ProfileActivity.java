@@ -90,7 +90,6 @@ public class ProfileActivity extends Activity {
         SharedPreferencesManager.setIsLogged(ProfileActivity.context, false);
         Log.i(ACTIVITY_TAG, "shared preference logged " + SharedPreferencesManager.isLogged(ProfileActivity.context));
         ParseUser.logOut();
-        ParseUser currentUser = ParseUser.getCurrentUser();
         return true;
     }
 

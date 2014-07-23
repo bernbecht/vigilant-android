@@ -61,8 +61,7 @@
 
     <LinearLayout
         android:id="@+id/categories_picker_input_linearlayout"
-        android:layout_height="0dp"
-        android:layout_weight="1.3"
+        android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:orientation="horizontal"
         android:background="@color/white"
@@ -72,19 +71,18 @@
         android:onClick="categoryButtonClicked">
 
         <ImageView
+            android:id="@+id/add_report_category_image"
             android:layout_height="fill_parent"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:background="@color/red_dark"
-            android:src="@drawable/image_mock" />
+            android:layout_width="wrap_content"
+            android:src="@drawable/ic_unknown" />
 
         <TextView
+            android:id="@+id/add_report_category_name"
             android:layout_height="fill_parent"
-            android:layout_width="0dp"
-            android:layout_weight="5"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="@dimen/vigilant_object_horizontal_margin_root_layout"
             android:text="Select a category"
-            android:gravity="center_vertical"
-            android:layout_marginLeft="@dimen/vigilant_object_horizontal_margin_root_layout" />
+            android:gravity="center_vertical"/>
     </LinearLayout>
 
     <Button

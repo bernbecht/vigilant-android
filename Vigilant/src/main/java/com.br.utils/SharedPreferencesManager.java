@@ -19,7 +19,7 @@ public class SharedPreferencesManager {
     }
 
     public static void setIsLogged(Context context, boolean status){
-        SharedPreferences settings = context.getSharedPreferences(MapActivity.PREFS_NAME, 0);
+        SharedPreferences settings = context.getSharedPreferences(SharedPreferencesManager.PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean(PREF_LOGGED, status);
         editor.commit();

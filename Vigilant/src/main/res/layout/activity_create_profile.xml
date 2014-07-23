@@ -9,16 +9,17 @@
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:background="@drawable/image_mock"
-            android:layout_height="wrap_content">
+            android:background="@color/red_medium"
+            android:layout_height="0dp"
+            android:layout_weight="0.9">
 
             <ImageView
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
                 android:paddingBottom="7dp"
                 android:paddingTop="27dp"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_gravity="center"
 
                 android:src="@drawable/ic_logo_create_profile"/>
@@ -46,8 +47,10 @@
             android:background="@color/white"
             style="@style/EditText_canvas_vigilant"
             android:layout_marginTop="60dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp">
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:paddingLeft="7dp"
+            android:paddingRight="7dp">
 
             <EditText
                 android:id="@+id/nickname__edittext"
@@ -83,9 +86,9 @@
             android:layout_weight="1"
             android:layout_width="fill_parent"
             android:orientation="vertical"
-            android:layout_marginRight="@dimen/vigilant_object_horizontal_margin_root_layout"
-            android:layout_marginLeft="@dimen/vigilant_object_horizontal_margin_root_layout"
-            android:layout_marginTop="50dp"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="20dp"
             android:paddingTop="7dp">
 
             <TextView

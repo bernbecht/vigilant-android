@@ -1,40 +1,25 @@
 package com.br.vigilant;
 
-import android.app.ProgressDialog;
+
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-
-import com.br.SharedPreferencesManager;
 import com.facebook.Request;
 import com.facebook.Response;
-import com.facebook.Session;
-import com.facebook.SessionState;
-import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
-import com.facebook.widget.LoginButton;
-import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.LogInCallback;
 import com.parse.Parse;
-import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
-import com.parse.SignUpCallback;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -44,10 +29,7 @@ import java.util.List;
 public class LoginActivity extends FragmentActivity {
 
     private static Context context;
-
     private final String ACTIVITY_TAG = "LoginActivity";
-
-
     private static GraphUser fb_user = null;
 
 
@@ -72,13 +54,24 @@ public class LoginActivity extends FragmentActivity {
             }
         });
 
-        //TODO check the nickname too
-        if(ParseUser.getCurrentUser() != null ){
-            Intent intent = new Intent(LoginActivity.context, MapActivity.class);
-            //make the previous this activity out of backstack
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
+
+        if(ParseUser.getCurrentUser() != null){
+            if(ParseUser.getCurrentUser().get("nickname") != null){
+                Log.d(ACTIVITY_TAG,"Current user found and he has nickname: "+ParseUser.getCurrentUser().get("nickname"));
+                Intent intent = new Intent(LoginActivity.context, MapActivity.class);
+                //make the previous this activity out of backstack
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+            else{
+                Intent intent = new Intent(LoginActivity.context, CreateProfileActivity.class);
+                //make the previous this activity out of backstack
+                //make the previous this activity out of backstack
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
         }
+
 
     }
 
@@ -97,8 +90,8 @@ public class LoginActivity extends FragmentActivity {
                     Request request = Request.newMeRequest(ParseFacebookUtils.getSession(), new Request.GraphUserCallback() {
                         @Override
                         public void onCompleted(GraphUser user, Response response) {
-                            // If the response is successful
 
+                            // If the response is successful
                             if (user != null) {
 
                                 LoginActivity.fb_user = user;
@@ -136,11 +129,16 @@ public class LoginActivity extends FragmentActivity {
                             "Current user " + ParseUser.getCurrentUser());
 
                     if (user.get("nickname") == null) {
+
                         Intent intent = new Intent(LoginActivity.context, CreateProfileActivity.class);
                         //make the previous this activity out of backstack
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                     } else {
+                        Log.d(ACTIVITY_TAG,
+                                "user nickname " + ParseUser.getCurrentUser().get("nickname"));
+
+
                         Intent intent = new Intent(LoginActivity.context, MapActivity.class);
                         //make the previous this activity out of backstack
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

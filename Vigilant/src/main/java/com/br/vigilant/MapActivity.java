@@ -59,8 +59,7 @@ public class MapActivity extends Activity {
         map.getUiSettings().setZoomControlsEnabled(false);
 
 
-
-
+        //TODO check which will be the default location
         LatLng waterford = new LatLng(52.256667, -7.129167);
 
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(waterford, 13));
@@ -89,8 +88,8 @@ public class MapActivity extends Activity {
     }
 
     public void changeListActivity(View view) {
-        Intent intent = new Intent(this, Map2.class);
-        startActivity(intent);
+        Intent cameraIntent = new Intent(this, AddReportActivity.class);
+        startActivity(cameraIntent);
     }
 
 
@@ -100,7 +99,7 @@ public class MapActivity extends Activity {
     }
 
     public void changeAddReportActivity(View view) {
-        Intent cameraIntent=new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(cameraIntent, CameraUtils.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
 
 //        Intent cameraIntent = new Intent(this, AddReportActivity.class);
@@ -131,8 +130,6 @@ public class MapActivity extends Activity {
             }
         }
     }
-
-
 
 
 }

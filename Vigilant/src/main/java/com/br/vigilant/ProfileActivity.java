@@ -11,7 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.br.SharedPreferencesManager;
+import com.br.utils.SharedPreferencesManager;
 import com.br.adapter.AdapterProfileSettingsAuxList;
 import com.br.adapter.AdapterProfileSettingsList;
 import com.facebook.Session;

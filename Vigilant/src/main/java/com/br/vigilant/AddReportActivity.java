@@ -18,20 +18,28 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.br.adapter.AdapterCategoriesList;
+import com.br.utils.CacheObject;
 import com.br.utils.LocationHandler;
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * Created by Berhell on 08/07/14.
@@ -39,24 +47,43 @@ import java.util.Locale;
 public class AddReportActivity extends Activity {
 
     private static Context context;
-    public static AdapterCategoriesList adapter_categories;
-    public static List<ParseObject> categories_list;
-    private ParseObject actual_category;
-    LocationHandler locationHandler;
+    private ParseObject actual_category = null;
+    private LocationHandler location_handler;
+    private Bitmap last_photo;
+    AdapterCategoriesList adapter_categories;
+    List<ParseObject> categories_list;
+    ParseObject actual_problem_status;
+
+    public static File cacheDir;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("ProblemCategory");
-        query.findInBackground(new FindCallback<ParseObject>() {
+        ParseQuery<ParseObject> categories_problem = ParseQuery.getQuery("ProblemCategory");
+        categories_problem.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> categories, ParseException e) {
                 if (!categories.isEmpty()) {
-                    AddReportActivity.adapter_categories = new AdapterCategoriesList(AddReportActivity.context, categories);
-                    AddReportActivity.categories_list = categories;
+                    adapter_categories = new AdapterCategoriesList(AddReportActivity.context, categories);
+                    categories_list = categories;
+                    Collections.sort(categories_list, new CustomComparator());
                     Log.d("Cat", "Cat result: " + categories);
+
                 } else {
-                    Log.d("score", "Error: ");
+                    Log.d("score", "Error: " + e);
+                }
+            }
+        });
+
+        ParseQuery<ParseObject> status_objects = ParseQuery.getQuery("ProblemStatus");
+        status_objects.whereEqualTo("objectId", "5uwuPDhv3c");
+        status_objects.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> parseObjects, ParseException e) {
+                if (!parseObjects.isEmpty()) {
+                    actual_problem_status = parseObjects.get(0);
+                } else {
+                    Log.d("score", "Error: " + e);
                 }
             }
         });
@@ -64,47 +91,34 @@ public class AddReportActivity extends Activity {
 
         AddReportActivity.context = getApplicationContext();
 
-        locationHandler = LocationHandler.getInstance();
+        location_handler = LocationHandler.getInstance();
 
+        //get the address based on coordinate
         Geocoder gcd = new Geocoder(context, Locale.getDefault());
         List<Address> addresses = null;
         try {
-            addresses = gcd.getFromLocation(locationHandler.getActualLatitude(),
-                    locationHandler.getActualLongitude(), 1);
+            addresses = gcd.getFromLocation(location_handler.getActualLatitude(),
+                    location_handler.getActualLongitude(), 1);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        //set view
         setContentView(R.layout.activity_add_report);
 
-        if (addresses.size() > 0){
-            Log.d("adress: ",addresses.get(0).getAddressLine(0)+addresses.get(0).getAddressLine(1));
+        //set the Address based on coordinate
+        if (addresses.size() > 0) {
+            Log.d("adress: ", addresses.get(0).getAddressLine(0) + addresses.get(0).getAddressLine(1));
             EditText editText_adress = (EditText) findViewById(R.id.address_report_input_edittext);
-            editText_adress.setText(addresses.get(0).getAddressLine(0)+", "+addresses.get(0).getAddressLine(1));
-        }
-        else {
+            editText_adress.setText(addresses.get(0).getAddressLine(0) + ", " + addresses.get(0).getAddressLine(1));
+        } else {
             EditText editText_adress = (EditText) findViewById(R.id.address_report_input_edittext);
             editText_adress.setText("Could you type the name of these street?");
         }
 
 
-
-
-
-
-        // Find the last picture
-        String[] projection = new String[]{
-                MediaStore.Images.ImageColumns._ID,
-                MediaStore.Images.ImageColumns.DATA,
-                MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME,
-                MediaStore.Images.ImageColumns.DATE_TAKEN,
-                MediaStore.Images.ImageColumns.MIME_TYPE
-        };
-        final Cursor cursor = getContentResolver()
-                .query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null,
-                        null, MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC");
-
-// Put it in the image view
+        final Cursor cursor = this.findLastPicture();
+        // Put it in the image view
         if (cursor.moveToFirst()) {
             final ImageView imageView = (ImageView) findViewById(R.id.photo_report_display_imageview);
             String imageLocation = cursor.getString(1);
@@ -112,6 +126,7 @@ public class AddReportActivity extends Activity {
             if (imageFile.exists()) {
                 Bitmap bm = BitmapFactory.decodeFile(imageLocation);
                 imageView.setImageBitmap(bm);
+                last_photo = bm;
             }
         }
         cursor.close();
@@ -164,10 +179,82 @@ public class AddReportActivity extends Activity {
 
     }
 
-    public void addNewReport(View v){
-        ParseObject new_report = new ParseObject("Problem");
-        new_report.put("description",findViewById(R.id.description_report_input_edittext));
-        new_report.put("unsolvedBy", ParseUser.getCurrentUser().getObjectId());
+    public void addNewReport(View v) {
 
+        boolean isValid = true;
+
+        String category_id = null;
+        EditText description_field = (EditText) findViewById(R.id.description_report_input_edittext);
+        EditText address_field = (EditText) findViewById(R.id.address_report_input_edittext);
+        if (actual_category != null) {
+            category_id = actual_category.getObjectId();
+        }
+        ParseGeoPoint location = new ParseGeoPoint(location_handler.getActualLatitude(), location_handler.getActualLongitude());
+
+        //Validate form
+        if (description_field.getText().toString() == "" || description_field == null)
+            isValid = false;
+        if (address_field.getText().toString() == "" || address_field == null)
+            isValid = false;
+        if (category_id == null)
+            isValid = false;
+        if (location == null)
+            isValid = false;
+        if (category_id == null)
+            isValid = false;
+
+        if (isValid) {
+            Toast.makeText(context, "Saving your report", Toast.LENGTH_SHORT).show();
+
+            //Compressing and manking a byte stream with the last photo
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            last_photo.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            byte[] data = stream.toByteArray();
+
+            ParseFile image_file = new ParseFile(data);
+            ParseObject new_report = new ParseObject("Problem");
+            new_report.put("description", description_field.getText().toString());
+            new_report.put("address", address_field.getText().toString());
+            new_report.put("problemCategory", actual_category);
+            new_report.put("statusObject", actual_problem_status);
+            new_report.put("coordinate", location);
+            new_report.put("userObject", ParseUser.getCurrentUser());
+            new_report.put("image", image_file);
+            new_report.put("innapropriate", false);
+            new_report.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e != null) {
+                        Log.d("Tag", "exception " + e);
+                    }
+                }
+            });
+            finish();
+        } else {
+            Toast.makeText(context, "Fill all the fields, please", Toast.LENGTH_SHORT).show();
+
+        }
+    }
+
+    public Cursor findLastPicture() {
+        String[] projection = new String[]{
+                MediaStore.Images.ImageColumns._ID,
+                MediaStore.Images.ImageColumns.DATA,
+                MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME,
+                MediaStore.Images.ImageColumns.DATE_TAKEN,
+                MediaStore.Images.ImageColumns.MIME_TYPE
+        };
+        final Cursor cursor = getContentResolver()
+                .query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null,
+                        null, MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC");
+
+        return cursor;
+    }
+
+    public class CustomComparator implements Comparator<ParseObject> {
+        @Override
+        public int compare(ParseObject o1, ParseObject o2) {
+            return o1.get("name").toString().compareTo(o2.get("name").toString());
+        }
     }
 }

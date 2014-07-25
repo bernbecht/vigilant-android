@@ -3,40 +3,84 @@ package com.br.vigilant;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.graphics.Camera;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.br.utils.CameraUtils;
+import com.br.utils.LocationHandler;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapActivity extends Activity {
 
-    private static Context context;
+    public static Context context;
 
     public static Uri fileUri;
+    private final static int
+            CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
-    public static Intent photoTaken;
+    LocationHandler locationHandler;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         setContentView(R.layout.activity_map);
 
         MapActivity.context = getApplicationContext();
 
+        locationHandler = LocationHandler.getInstance();
+
         mapInit();
+
+    }
+
+    public GoogleMap mapInit() {
+
+        GoogleMap map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
+                .getMap();
+
+        map.getUiSettings().setZoomControlsEnabled(false);
+
+
+
+
+        LatLng waterford = new LatLng(52.256667, -7.129167);
+
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(waterford, 13));
+
+        map.addMarker(new MarkerOptions()
+                .title("Report 1")
+                .snippet("This is Spaaaarta")
+                .position(waterford));
+
+        map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                Intent intent = new Intent(MapActivity.context, ReportDescriptionActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                MapActivity.context.startActivity(intent);
+            }
+        });
+
+
+        return map;
     }
 
     @Override
@@ -56,20 +100,12 @@ public class MapActivity extends Activity {
     }
 
     public void changeAddReportActivity(View view) {
-//        Intent intent = new Intent(this, AddReportActivity.class);
-//        startActivity(intent);
-
-//        // create Intent to take a picture and return control to the calling application
-//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//
-//        fileUri = CameraUtils.getOutputMediaFileUri(CameraUtils.MEDIA_TYPE_IMAGE); // create a file to save the image
-//        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
-//
-//        // start the image capture Intent
-//        startActivityForResult(intent, CameraUtils.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-
         Intent cameraIntent=new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(cameraIntent, CameraUtils.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+
+//        Intent cameraIntent = new Intent(this, AddReportActivity.class);
+//        startActivity(cameraIntent);
+
 
     }
 
@@ -78,15 +114,15 @@ public class MapActivity extends Activity {
         if (requestCode == CameraUtils.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
 
-                Intent mediaScanIntent = new Intent( Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                 mediaScanIntent.setData(fileUri);
                 sendBroadcast(mediaScanIntent);
 
-                Log.d("MyCamera","data: "+data.getExtras().get("data"));
+                Log.d("MyCamera", "data: " + data.getExtras().get("data"));
 
                 // Image captured and saved to fileUri specified in the Intent
                 Intent intent = new Intent(this, AddReportActivity.class);
-                intent.putExtra("uri",fileUri);
+                intent.putExtra("uri", fileUri);
                 startActivity(intent);
             } else if (resultCode == RESULT_CANCELED) {
                 // User cancelled the image capture
@@ -97,32 +133,7 @@ public class MapActivity extends Activity {
     }
 
 
-    public GoogleMap mapInit() {
-        GoogleMap map = ((MapFragment) getFragmentManager()
-                .findFragmentById(R.id.map)).getMap();
 
-        map.getUiSettings().setZoomControlsEnabled(false);
-
-        LatLng waterford = new LatLng(52.25667, -7.12917);
-
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(waterford, 13));
-
-        map.addMarker(new MarkerOptions()
-                .title("Report 1")
-                .snippet("This is Spaaaarta")
-                .position(waterford));
-
-        map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-            @Override
-            public void onInfoWindowClick(Marker marker) {
-                Intent intent = new Intent(MapActivity.context, ReportDescriptionActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
-        return map;
-    }
 
 }
 

@@ -6,4 +6,6 @@
     <dimen name="vigilant_object_horizontal_margin_root_layout">7dp</dimen>
     <dimen name="vigilant_object_padding_default">7dp</dimen>
 
+    <dimen name="font_medium">14sp</dimen>
+
     </resources>

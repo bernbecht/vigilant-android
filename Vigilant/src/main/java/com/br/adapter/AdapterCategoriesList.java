@@ -3,6 +3,7 @@ package com.br.adapter;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,15 +12,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.br.vigilant.R;
+import com.parse.ParseObject;
+
+import java.util.List;
 
 /**
  * Created by Berhell on 08/07/14.
  */
-public class AdapterCategoriesList extends ArrayAdapter<String> {
+public class AdapterCategoriesList extends ArrayAdapter<ParseObject> {
     private final Context context;
-    private final String[] values;
+    private final List<ParseObject> values;
 
-    public AdapterCategoriesList(Context context, String[] values) {
+    public AdapterCategoriesList(Context context, List<ParseObject> values) {
         super(context, R.layout.adapter_categories, values);
         this.context = context;
         this.values = values;
@@ -33,14 +37,17 @@ public class AdapterCategoriesList extends ArrayAdapter<String> {
 
         TextView textView = (TextView) rowView.findViewById(R.id.text_item_settings_profile);
         ImageView image = (ImageView) rowView.findViewById(R.id.image_item_settings_profile);
-        String[] separated = values[position].split("-");
-        textView.setText(separated[0]);
-               Resources res = context.getResources();
-        int resID = res.getIdentifier(separated[1] , "drawable", context.getPackageName());
+        textView.setText(values.get(position).get("name").toString());
+
+
+        Log.d("Cat", "Cat " + position + ": " + values.get(position).get("categoryLogo").toString() + ".png");
+
+        Resources res = context.getResources();
+        int resID = res.getIdentifier(values.get(position).get("categoryLogo").toString(),
+                "drawable",
+                context.getPackageName());
         Drawable drawable = res.getDrawable(resID);
         image.setImageDrawable(drawable);
-
-//        image.setImageResource(R.drawable.ic_airport);
 
         return rowView;
     }

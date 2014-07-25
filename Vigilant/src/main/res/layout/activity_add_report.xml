@@ -7,57 +7,34 @@
     style="@style/LayoutBackground_Vigilant">
 
     <LinearLayout
-        android:layout_height="0dp"
-        android:layout_weight="1.46"
+        android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:background="@color/white"
+        android:paddingLeft="7dp"
+        android:paddingRight="7dp"
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp"
         style="@style/EditText_canvas_vigilant"
-        android:paddingBottom="0dp">
+
+        >
 
         <EditText
             android:id="@+id/address_report_input_edittext"
             android:layout_height="fill_parent"
             android:layout_width="fill_parent"
-            android:hint="Brigadeiro Rocha Loures, 251" />
+            android:hint="Brigadeiro Rocha Loures, 251"
+            android:textSize="@dimen/font_medium"
+            android:background="@color/white"
+            />
     </LinearLayout>
 
     <ImageView
         android:id="@+id/photo_report_display_imageview"
         android:layout_height="0dp"
-        android:layout_weight="3.8"
+        android:layout_weight="8"
         android:layout_width="fill_parent"
-        android:src="@drawable/image_mock" />
-
-    <LinearLayout
-        android:layout_height="0dp"
-        android:layout_weight="5"
-        android:layout_width="fill_parent"
-        android:background="@color/white"
-        android:orientation="vertical"
-        style="@style/TextArea_canvas_vigilant">
-
-
-        <EditText
-            android:id="@+id/description_report_input_edittext"
-            android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_weight="10"
-            android:gravity="top"
-            android:inputType="textMultiLine"
-            android:maxLength="140"
-            android:hint="What is happening in this place?" />
-
-
-        <TextView
-            android:id="@+id/char_counter_display_textview"
-            android:layout_marginTop="2dp"
-            android:layout_height="0dp"
-            android:layout_weight="1.2"
-            android:layout_width="fill_parent"
-            android:text="140 char remaining"
-            android:textSize="10sp"
-            android:gravity="right" />
-    </LinearLayout>
+        android:src="@drawable/image_mock"
+        android:scaleType="centerCrop" />
 
     <LinearLayout
         android:id="@+id/categories_picker_input_linearlayout"
@@ -67,7 +44,7 @@
         android:background="@color/white"
         android:layout_marginLeft="@dimen/vigilant_object_horizontal_margin_root_layout"
         android:layout_marginRight="@dimen/vigilant_object_horizontal_margin_root_layout"
-        android:layout_marginBottom="@dimen/vigilant_object_vertical_margin_root_layout"
+        android:layout_marginTop="@dimen/vigilant_object_vertical_margin_root_layout"
         android:onClick="categoryButtonClicked">
 
         <ImageView
@@ -82,18 +59,56 @@
             android:layout_width="wrap_content"
             android:layout_marginLeft="@dimen/vigilant_object_horizontal_margin_root_layout"
             android:text="Select a category"
+            android:textSize="@dimen/font_medium"
             android:gravity="center_vertical"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:background="@color/white"
+        android:orientation="vertical"
+        style="@style/TextArea_canvas_vigilant">
+
+
+        <EditText
+            android:id="@+id/description_report_input_edittext"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:inputType="textMultiLine"
+            android:maxLength="140"
+            android:hint="What is happening in this place?"
+            android:textSize="@dimen/font_medium"
+            android:scrollHorizontally="false"/>
+
+
+        <TextView
+            android:id="@+id/char_counter_display_textview"
+            android:layout_marginTop="2dp"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:text="Max 140 characters"
+            android:textSize="9sp"
+            android:gravity="right" />
     </LinearLayout>
 
     <Button
         android:id="@+id/add_report_input_button"
-        android:layout_height="0dp"
-        android:layout_weight="1.4"
+        android:layout_height="wrap_content"
         android:layout_width="fill_parent"
-        android:layout_marginTop="@dimen/vigilant_object_vertical_margin_root_layout"
+
+        android:layout_marginBottom="@dimen/vigilant_object_vertical_margin_root_layout"
+        android:layout_marginRight="@dimen/vigilant_object_horizontal_margin_root_layout"
+        android:layout_marginLeft="@dimen/vigilant_object_horizontal_margin_root_layout"
         android:text="Report"
         android:textColor="@color/white"
-        android:background="@drawable/add_button" />
+        android:textSize="20sp"
+        android:background="@drawable/add_button"
+        android:onClick="addNewReport"/>
+
+
+
 
 
 </LinearLayout>

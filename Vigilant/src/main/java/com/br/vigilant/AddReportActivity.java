@@ -75,6 +75,7 @@ public class AddReportActivity extends Activity {
             }
         });
 
+        //get the object with the status OPENED
         ParseQuery<ParseObject> status_objects = ParseQuery.getQuery("ProblemStatus");
         status_objects.whereEqualTo("objectId", "5uwuPDhv3c");
         status_objects.findInBackground(new FindCallback<ParseObject>() {
@@ -116,7 +117,7 @@ public class AddReportActivity extends Activity {
             editText_adress.setText("Could you type the name of these street?");
         }
 
-
+        //get the last picture taken
         final Cursor cursor = this.findLastPicture();
         // Put it in the image view
         if (cursor.moveToFirst()) {
@@ -133,13 +134,12 @@ public class AddReportActivity extends Activity {
     }
 
     public void categoryButtonClicked(View view) {
-
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(
                 this);
         builderSingle.setIcon(R.drawable.ic_launcher);
         builderSingle.setTitle("Which category?");
 
-////Implementaçao estática das categorias para o adapterå
+////Implementaçao estática das categorias para o adapter
 //        String[] categories_names = new String[]{"Airport-ic_airport", "Animals-ic_animals", "Environment and Pollution-ic_environment",
 //                "Public Lighting-ic_lighting", "Public Property-ic_property", "Public Transport-ic_transport", "Road and Street Conditions-ic_road",
 //                "Trees-ic_tree", "Secutiry-ic_security", "Rubbish-ic_rubbish", "Other-ic_others", "Culture, Sports and Leisure-ic_culture", "Hospitals and Health Care-ic_hospital",
@@ -176,7 +176,6 @@ public class AddReportActivity extends Activity {
                 }
         );
         builderSingle.show();
-
     }
 
     public void addNewReport(View v) {
@@ -210,8 +209,8 @@ public class AddReportActivity extends Activity {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             last_photo.compress(Bitmap.CompressFormat.JPEG, 100, stream);
             byte[] data = stream.toByteArray();
-
             ParseFile image_file = new ParseFile(data);
+
             ParseObject new_report = new ParseObject("Problem");
             new_report.put("description", description_field.getText().toString());
             new_report.put("address", address_field.getText().toString());

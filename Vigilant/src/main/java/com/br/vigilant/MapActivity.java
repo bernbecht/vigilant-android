@@ -3,28 +3,27 @@ package com.br.vigilant;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentSender;
-import android.graphics.Camera;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.br.utils.CameraUtils;
 import com.br.utils.LocationHandler;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
-import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MapActivity extends Activity {
 
@@ -34,8 +33,10 @@ public class MapActivity extends Activity {
     private final static int
             CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
+    List<ParseObject> problemsList;
+    ParseObject problem;
     LocationHandler locationHandler;
-
+    private Map<Marker, ParseObject> allMarkersMap = new HashMap<Marker, ParseObject>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,8 +48,20 @@ public class MapActivity extends Activity {
 
         locationHandler = LocationHandler.getInstance();
 
+        try {
+            getAllProblemsFromCloud();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         mapInit();
 
+    }
+
+    public void getAllProblemsFromCloud() throws ParseException {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Problem");
+        query.whereEqualTo("innapropriate", false);
+        problemsList = query.find();
     }
 
     public GoogleMap mapInit() {
@@ -64,19 +77,35 @@ public class MapActivity extends Activity {
 
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(waterford, 13));
 
-        map.addMarker(new MarkerOptions()
-                .title("Report 1")
-                .snippet("This is Spaaaarta")
-                .position(waterford));
+        if (problemsList != null) {
+            for (int i = 0; i < problemsList.size(); i++) {
+                problem = problemsList.get(i);
+                final ParseGeoPoint problemCoord = (ParseGeoPoint) problem.get("coordinate");
+                final LatLng problemPinCoord = new LatLng(problemCoord.getLatitude(), problemCoord.getLongitude());
+                Marker marker = map.addMarker(new MarkerOptions()
+                        .title("Report " + problem.getObjectId())
+                        .snippet("This is Spaaaarta")
+                        .position(problemPinCoord));
+                allMarkersMap.put(marker, problem);
 
-        map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-            @Override
-            public void onInfoWindowClick(Marker marker) {
-                Intent intent = new Intent(MapActivity.context, ReportDescriptionActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                MapActivity.context.startActivity(intent);
+                Log.d("teste", "user: " + problem);
+
+                map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                    @Override
+                    public void onInfoWindowClick(Marker marker) {
+                        Intent intent = new Intent(MapActivity.context, ReportDescriptionActivity.class);
+                        ParseObject problemClicked = allMarkersMap.get(marker);
+                        Log.d("teste", "user infoWindow: " + problemClicked.get("description"));
+                        Log.d("teste", "user infoWindow: " + problemClicked);
+                        intent.putExtra("objectId", problemClicked.getObjectId());
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        MapActivity.context.startActivity(intent);
+                    }
+                });
             }
-        });
+        } else {
+            Log.d("problemsList", "problemList Null mapInit " + problemsList);
+        }
 
 
         return map;

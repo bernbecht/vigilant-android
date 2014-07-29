@@ -37,6 +37,7 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/textview_address_reportDescription"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:text="Manor Village,Cork Road,251"
@@ -45,6 +46,7 @@
                             android:layout_marginRight="@dimen/vigilant_object_horizontal_margin_root_layout" />
 
                         <TextView
+                            android:id="@+id/textview_country_reportDescription"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:text="Waterford"
@@ -59,6 +61,7 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/textview_date_reportDescription"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:text="12/12/2012"
@@ -72,6 +75,7 @@
 
 
             <LinearLayout
+                android:id="@+id/linearLayout_status_reportDescription"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -80,6 +84,7 @@
                 android:paddingBottom="2dp">
 
                 <TextView
+                    android:id="@+id/textview_status_reportDescription"
                     android:gravity="center_vertical"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
@@ -97,9 +102,11 @@
                 android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/imageview_problem_reportDescription"
                     android:layout_width="fill_parent"
-                    android:layout_height="210dp"
-                    android:src="@drawable/image_mock" />
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/image_mock"
+                    android:scaleType="centerCrop"/>
             </LinearLayout>
 
             <LinearLayout
@@ -114,12 +121,14 @@
                     android:orientation="horizontal">
 
                     <ImageView
+                        android:id="@+id/imageview_category_reportDescription"
                         android:layout_width="39dp"
                         android:layout_height="39dp"
                         android:src="@drawable/ic_airport"
                         android:background="@color/green_medium" />
 
                     <TextView
+                        android:id="@+id/textview_category_reportDescription"
                         android:layout_width="wrap_content"
                         android:layout_height="fill_parent"
                         android:gravity="center_vertical"
@@ -146,13 +155,15 @@
                         android:src="@drawable/ic_bothered" />
 
                     <TextView
+                        android:id="@+id/textview_bothered_reportDescription"
                         android:layout_width="0dp"
                         android:layout_weight="2"
                         android:layout_height="fill_parent"
                         android:text="20 bothered"
                         android:textStyle="bold"
                         android:gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/vigilant_object_horizontal_margin_root_layout" />
+                        android:paddingLeft="@dimen/vigilant_object_horizontal_margin_root_layout"
+                        />
 
 
                     <LinearLayout
@@ -160,17 +171,18 @@
                         android:layout_height="fill_parent"
                         android:gravity="center_vertical">
 
-                        <TextView
+                        <Button
+                            android:id="@+id/button_bothered_reportDescription"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Are you bothered?"
-                            android:background="@drawable/image_mock"
+                            android:textSize="15sp"
+                            android:background="@drawable/bothered_button"
                             android:textColor="@color/white"
                             android:layout_marginRight="@dimen/vigilant_object_horizontal_margin_root_layout"
-                            android:paddingLeft="5dp"
-                            android:paddingRight="5dp"
-                            android:paddingTop="5dp"
-                            android:paddingBottom="5dp" />
+                            android:paddingLeft="7dp"
+                            android:paddingRight="7dp"
+                            android:onClick="addBothered"/>
                     </LinearLayout>
 
                 </LinearLayout>
@@ -184,6 +196,7 @@
                 android:layout_marginTop="@dimen/vigilant_object_vertical_margin_root_layout">
 
                 <TextView
+                    android:id="@+id/textview_nickname_reportDescription"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:text="@string/mock_username"
@@ -203,6 +216,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/textview_description_reportDescription"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/mock_1_paragraph"

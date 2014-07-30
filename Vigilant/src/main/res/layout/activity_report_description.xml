@@ -104,7 +104,7 @@
                 <ImageView
                     android:id="@+id/imageview_problem_reportDescription"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="300dp"
                     android:src="@drawable/image_mock"
                     android:scaleType="centerCrop"/>
             </LinearLayout>

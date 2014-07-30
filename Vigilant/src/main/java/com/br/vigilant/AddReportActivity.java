@@ -53,6 +53,7 @@ public class AddReportActivity extends Activity {
     AdapterCategoriesList adapter_categories;
     List<ParseObject> categories_list;
     ParseObject actual_problem_status;
+    List<Address> addresses = null;
 
     public static File cacheDir;
 
@@ -96,7 +97,6 @@ public class AddReportActivity extends Activity {
 
         //get the address based on coordinate
         Geocoder gcd = new Geocoder(context, Locale.getDefault());
-        List<Address> addresses = null;
         try {
             addresses = gcd.getFromLocation(location_handler.getActualLatitude(),
                     location_handler.getActualLongitude(), 1);
@@ -109,9 +109,9 @@ public class AddReportActivity extends Activity {
 
         //set the Address based on coordinate
         if (addresses.size() > 0) {
-            Log.d("adress: ", addresses.get(0).getAddressLine(0) + addresses.get(0).getAddressLine(1));
+            Log.d("adress: ", addresses.get(0).getAddressLine(0) + addresses.get(0).getAddressLine(1)+ addresses.get(0).getAddressLine(2));
             EditText editText_adress = (EditText) findViewById(R.id.address_report_input_edittext);
-            editText_adress.setText(addresses.get(0).getAddressLine(0) + ", " + addresses.get(0).getAddressLine(1));
+            editText_adress.setText(addresses.get(0).getAddressLine(0) + ", " + addresses.get(0).getAddressLine(1)+ ", " +addresses.get(0).getAddressLine(2));
         } else {
             EditText editText_adress = (EditText) findViewById(R.id.address_report_input_edittext);
             editText_adress.setText("Could you type the name of these street?");
@@ -138,12 +138,6 @@ public class AddReportActivity extends Activity {
                 this);
         builderSingle.setIcon(R.drawable.ic_launcher);
         builderSingle.setTitle("Which category?");
-
-////Implementaçao estática das categorias para o adapter
-//        String[] categories_names = new String[]{"Airport-ic_airport", "Animals-ic_animals", "Environment and Pollution-ic_environment",
-//                "Public Lighting-ic_lighting", "Public Property-ic_property", "Public Transport-ic_transport", "Road and Street Conditions-ic_road",
-//                "Trees-ic_tree", "Secutiry-ic_security", "Rubbish-ic_rubbish", "Other-ic_others", "Culture, Sports and Leisure-ic_culture", "Hospitals and Health Care-ic_hospital",
-//                "Family and Social Assistance-ic_family", "Public Service-ic_service"};
 
         builderSingle.setNegativeButton("cancel",
                 new DialogInterface.OnClickListener() {
@@ -183,6 +177,7 @@ public class AddReportActivity extends Activity {
         boolean isValid = true;
 
         String category_id = null;
+        //Get fields
         EditText description_field = (EditText) findViewById(R.id.description_report_input_edittext);
         EditText address_field = (EditText) findViewById(R.id.address_report_input_edittext);
         if (actual_category != null) {
@@ -220,6 +215,8 @@ public class AddReportActivity extends Activity {
             new_report.put("userObject", ParseUser.getCurrentUser());
             new_report.put("image", image_file);
             new_report.put("innapropriate", false);
+            new_report.put("city", addresses.get(0).getAddressLine(1).toString());
+            new_report.put("country", addresses.get(0).getAddressLine(2).toString());
             new_report.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {

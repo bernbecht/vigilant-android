@@ -3,6 +3,8 @@ package com.br.vigilant;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,9 +15,11 @@ import com.br.utils.LocationHandler;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
@@ -60,6 +64,9 @@ public class MapActivity extends Activity {
 
     public void getAllProblemsFromCloud() throws ParseException {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Problem");
+        query.include("userObject");
+        query.include("statusObject");
+        query.include("problemCategory");
         query.whereEqualTo("innapropriate", false);
         problemsList = query.find();
     }
@@ -80,12 +87,23 @@ public class MapActivity extends Activity {
         if (problemsList != null) {
             for (int i = 0; i < problemsList.size(); i++) {
                 problem = problemsList.get(i);
+                ParseObject category = (ParseObject) problem.get("problemCategory");
+                ParseObject status = (ParseObject) problem.get("statusObject");
                 final ParseGeoPoint problemCoord = (ParseGeoPoint) problem.get("coordinate");
                 final LatLng problemPinCoord = new LatLng(problemCoord.getLatitude(), problemCoord.getLongitude());
+                //set category logo
+                Resources res = context.getResources();
+                int resID = res.getIdentifier(category.get("pinName").toString()+"_"+status.get("name"),
+                        "drawable",
+                        context.getPackageName());
+                Drawable drawable = res.getDrawable(resID);
+
                 Marker marker = map.addMarker(new MarkerOptions()
                         .title("Report " + problem.getObjectId())
-                        .snippet("This is Spaaaarta")
-                        .position(problemPinCoord));
+                        .snippet(category.get("name").toString())
+                        .position(problemPinCoord)
+                        .icon(BitmapDescriptorFactory.fromResource(resID)));
+
                 allMarkersMap.put(marker, problem);
 
                 Log.d("teste", "user: " + problem);

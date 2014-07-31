@@ -35,7 +35,7 @@ public class ProfileActivity extends Activity {
         ListView l1 = (ListView) this.findViewById(R.id.list1);
         ListView l2 = (ListView) this.findViewById(R.id.list2);
 
-        String[] values1 = new String[]{"Change email", "Change password", "Change city"};
+        String[] values1 = new String[]{"Change email", "Change Avatar"};
         String[] values2 = new String[]{"Logout"};
         AdapterProfileSettingsList adapter1 = new AdapterProfileSettingsList(this, values1);
         AdapterProfileSettingsAuxList adapter2 = new AdapterProfileSettingsAuxList(this, values2);
@@ -57,13 +57,18 @@ public class ProfileActivity extends Activity {
                 Intent intent = new Intent(ProfileActivity.context, EditEmail.class);
                 startActivity(intent);
             } else if (position == 1) {
-                Intent intent = new Intent(ProfileActivity.context, EditPassword.class);
-                startActivity(intent);
+//                Intent intent = new Intent(ProfileActivity.context, EditPassword.class);
+//                startActivity(intent);
 
-            } else if (position == 2) {
-                Intent intent = new Intent(ProfileActivity.context, EditCity.class);
-                startActivity(intent);
             }
+//            } else if (position == 1) {
+//                Intent intent = new Intent(ProfileActivity.context, EditPassword.class);
+//                startActivity(intent);
+//
+//            } else if (position == 2) {
+//                Intent intent = new Intent(ProfileActivity.context, EditCity.class);
+//                startActivity(intent);
+//            }
         }
     };
 

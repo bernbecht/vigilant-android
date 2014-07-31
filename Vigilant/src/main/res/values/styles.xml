@@ -38,9 +38,9 @@
     <style name="LinearLayoutDefault_Vigilant">
         <item name="android:background">#DDD</item>
         <item name="android:paddingBottom">10dp</item>
-        <item name="android:paddingTop">15dp</item>
-        <item name="android:paddingRight">10dp</item>
-        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingTop">@dimen/vigilant_object_vertical_margin_root_layout</item>
+        <item name="android:paddingRight">@dimen/vigilant_object_horizontal_margin_root_layout</item>
+        <item name="android:paddingLeft">@dimen/vigilant_object_horizontal_margin_root_layout</item>
     </style>
 
     <style name="ProfileListItem_Vigilant">

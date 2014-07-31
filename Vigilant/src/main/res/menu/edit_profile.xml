@@ -3,8 +3,10 @@
     tools:context=".EditEmail" >
 
     <item
-        android:id="@+id/action_refresh"
+        android:id="@+id/item_addButtonMenu"
         android:orderInCategory="100"
         android:showAsAction="always"
-        android:title="Save"/>
+        android:title="Save"
+        android:onClick="saveItem"
+        />
 </menu>

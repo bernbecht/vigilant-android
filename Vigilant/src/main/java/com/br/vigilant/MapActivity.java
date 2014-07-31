@@ -40,6 +40,8 @@ public class MapActivity extends Activity {
     ParseObject problem;
     LocationHandler locationHandler;
     private Map<Marker, ParseObject> allMarkersMap = new HashMap<Marker, ParseObject>();
+    GoogleMap map;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,16 @@ public class MapActivity extends Activity {
         setContentView(R.layout.activity_map);
 
         MapActivity.context = getApplicationContext();
+
+        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
+                .getMap();
+
+        map.getUiSettings().setZoomControlsEnabled(false);
+
+
+            //TODO check which will be the default location
+            LatLng waterford = new LatLng(52.256667, -7.129167);
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(waterford, 13));
 
 //        locationHandler = LocationHandler.getInstance();
 //
@@ -74,16 +86,6 @@ public class MapActivity extends Activity {
 
     public GoogleMap mapInit() {
 
-        GoogleMap map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
-                .getMap();
-
-        map.getUiSettings().setZoomControlsEnabled(false);
-
-
-        //TODO check which will be the default location
-        LatLng waterford = new LatLng(52.256667, -7.129167);
-
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(waterford, 13));
 
         if (problemsList != null) {
             for (int i = 0; i < problemsList.size(); i++) {

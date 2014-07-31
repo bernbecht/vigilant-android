@@ -2,7 +2,8 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="vigilant_object_vertical_margin_root_layout">10dp</dimen>
+    <dimen name="vigilant_object_vertical_margin_root_layout">16dp</dimen>
+    <dimen name="space_less_important_object">8dp</dimen>
     <dimen name="vigilant_object_horizontal_margin_root_layout">7dp</dimen>
     <dimen name="vigilant_object_padding_default">7dp</dimen>
 

@@ -12,7 +12,7 @@
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:paddingTop="15dp"
-        android:paddingBottom="20dp">
+        android:paddingBottom="0dp">
 
         <ImageView
             android:id="@+id/image_profile"
@@ -22,12 +22,10 @@
             android:src="@drawable/profile" />
 
         <LinearLayout
-            android:layout_marginTop="5dp"
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
             android:layout_marginLeft="10dp"
             android:orientation="vertical">
-
 
             <TextView
                 android:id="@+id/username_profile"

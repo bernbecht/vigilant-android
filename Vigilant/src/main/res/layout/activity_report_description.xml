@@ -80,8 +80,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:background="@color/green_medium"
-                android:paddingTop="2dp"
-                android:paddingBottom="2dp">
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp">
 
                 <TextView
                     android:id="@+id/textview_status_reportDescription"

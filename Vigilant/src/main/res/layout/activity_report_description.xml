@@ -45,13 +45,13 @@
                             android:layout_marginLeft="@dimen/vigilant_object_horizontal_margin_root_layout"
                             android:layout_marginRight="@dimen/vigilant_object_horizontal_margin_root_layout" />
 
-                        <TextView
-                            android:id="@+id/textview_country_reportDescription"
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Waterford"
-                            android:layout_marginLeft="@dimen/vigilant_object_horizontal_margin_root_layout"
-                            android:layout_marginRight="@dimen/vigilant_object_horizontal_margin_root_layout" />
+                        <!--<TextView-->
+                            <!--android:id="@+id/textview_country_reportDescription"-->
+                            <!--android:layout_width="fill_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:text="Waterford"-->
+                            <!--android:layout_marginLeft="@dimen/vigilant_object_horizontal_margin_root_layout"-->
+                            <!--android:layout_marginRight="@dimen/vigilant_object_horizontal_margin_root_layout" />-->
                     </LinearLayout>
 
                     <LinearLayout
@@ -231,11 +231,13 @@
                 android:orientation="vertical">
 
                 <Button
+                    android:id="@+id/button_moreFeatures_reportDescription"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="..."
                     android:layout_gravity="right"
-                    android:layout_marginRight="@dimen/vigilant_object_horizontal_margin_root_layout" />
+                    android:layout_marginRight="@dimen/vigilant_object_horizontal_margin_root_layout"
+                    android:onClick="showMoreFeaturesDialog"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

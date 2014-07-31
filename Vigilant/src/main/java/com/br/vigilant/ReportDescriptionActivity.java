@@ -1,7 +1,9 @@
 package com.br.vigilant;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -14,7 +16,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.br.adapter.AdapterCategoriesList;
+import com.br.adapter.AdapterMoreFeaturesList;
+import com.br.utils.DatePicker;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -23,17 +29,18 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Created by Berhell on 10/07/14.
  */
 public class ReportDescriptionActivity extends Activity {
-
 
     private ParseObject problem;
     private ParseObject category;
@@ -43,6 +50,8 @@ public class ReportDescriptionActivity extends Activity {
     public Context context;
     private boolean isBothered = false;
     private boolean isBotheredInit = false;
+    //variable for change the Content early the Cloud response
+    private boolean isSolved;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +72,7 @@ public class ReportDescriptionActivity extends Activity {
 
         if (problem != null) {
             TextView address = (TextView) findViewById(R.id.textview_address_reportDescription);
-            TextView country = (TextView) findViewById(R.id.textview_country_reportDescription);
+//            TextView country = (TextView) findViewById(R.id.textview_country_reportDescription);
             TextView createdAt = (TextView) findViewById(R.id.textview_date_reportDescription);
             TextView problemStatusField = (TextView) findViewById(R.id.textview_status_reportDescription);
             ImageView problemImageField = (ImageView) findViewById(R.id.imageview_problem_reportDescription);
@@ -77,7 +86,7 @@ public class ReportDescriptionActivity extends Activity {
 
 
             address.setText(problem.get("address").toString());
-            country.setText(problem.get("address").toString());
+//            country.setText(problem.get("address").toString());
 
             SimpleDateFormat df = new SimpleDateFormat("MMM dd, yyyy");
             createdAt.setText(df.format(problem.getCreatedAt()));
@@ -106,7 +115,7 @@ public class ReportDescriptionActivity extends Activity {
             problemImageField.setImageBitmap(bmp);
 
             problemStatusField.setText(status.get("name").toString() + " " + df.format(status.getUpdatedAt()));
-            if (status.get("name").toString() == "solved") {
+            if (isSolved) {
                 problemStatusContainer.setBackgroundColor(getResources().getColor(R.color.green_dark));
             } else {
                 problemStatusContainer.setBackgroundColor(getResources().getColor(R.color.red_dark));
@@ -126,7 +135,6 @@ public class ReportDescriptionActivity extends Activity {
         }
     }
 
-
     //TODO: (PERSISTENCE) it should be a persistence and not a new request
     public void getAllProblemsFromCloud(String objectId) throws ParseException {
         List<ParseObject> problemsResult;
@@ -141,6 +149,13 @@ public class ReportDescriptionActivity extends Activity {
             category = (ParseObject) problem.get("problemCategory");
             user = (ParseUser) problem.get("userObject");
             status = (ParseObject) problem.get("statusObject");
+
+            //set the variable for problem's status for Actvity changes
+            if (status.get("name").equals("solved")) {
+                isSolved = true;
+            } else {
+                isSolved = false;
+            }
 
             Log.d("test", "desc report: " + problem.getObjectId());
             Log.d("teste", "prob desc: " + problem.get("description"));
@@ -184,24 +199,153 @@ public class ReportDescriptionActivity extends Activity {
         if (!isBothered) {
             botheredNumber++;
             botheredLabel.setText(botheredNumber + " bothered");
-            botheredButton.setText(getResources().getText(R.string.button_bothered_clicked_reportDescription));
             botheredButton.setBackground(getResources().getDrawable(R.drawable.bothered_button_clicked));
+            botheredButton.setPadding(14,7,14,7);
+            botheredButton.setText(getResources().getText(R.string.button_bothered_clicked_reportDescription));
+
             this.isBothered = true;
         } else {
             botheredNumber--;
             botheredLabel.setText(botheredNumber + " bothered");
             botheredButton.setBackground(getResources().getDrawable(R.drawable.bothered_button_normal));
+            botheredButton.setPadding(14,7,14,7);
             botheredButton.setText(getResources().getText(R.string.button_bothered_normal_reportDescription));
-
             isBothered = false;
         }
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (!isBotheredInit && isBothered) {
+    public void showMoreFeaturesDialog(View v) {
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(
+                this);
 
+
+        String[] listCategories = {"This problem is solved", "Share on Facebook", "Report this as inappropriate"};
+        Log.d("teste", "status problem: " + status.get("name"));
+        if (isSolved) {
+            listCategories[0] = "This problem is not solved";
+            Log.d("teste", "status problem: " + status.get("name"));
+        }
+
+        AdapterMoreFeaturesList adapter_categories = new AdapterMoreFeaturesList(this.context,
+                listCategories);
+
+        builderSingle.setAdapter(adapter_categories,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        if (!status.get("name").equals("solved")) {
+                            switch (which) {
+                                case 0:
+                                    Toast.makeText(context, "Thank you", Toast.LENGTH_SHORT).show();
+                                    Log.d("teste", "Solved");
+                                    setProblemStatusCloud();
+                                    break;
+                                case 1:
+                                    Toast.makeText(context, "Sharing...", Toast.LENGTH_SHORT).show();
+                                    Log.d("teste", "Facebook");
+                                    break;
+                                case 2:
+                                    Toast.makeText(context, "Reporting...", Toast.LENGTH_SHORT).show();
+                                    Log.d("teste", "Report");
+                                    ParseObject inappropriateObject = new ParseObject("Innapropriate");
+                                    inappropriateObject.put("userObject", ParseUser.getCurrentUser());
+                                    inappropriateObject.put("problemObject", problem);
+                                    inappropriateObject.saveInBackground();
+                                    break;
+                            }
+                        } else {
+                            switch (which) {
+                                case 0:
+                                    Toast.makeText(context, "Thank you", Toast.LENGTH_SHORT).show();
+                                    Log.d("teste", "UnSolved");
+                                    setProblemStatusCloud();
+                                    break;
+                                case 1:
+                                    Toast.makeText(context, "Sharing...", Toast.LENGTH_SHORT).show();
+                                    Log.d("teste", "Facebook");
+                                    break;
+                                case 2:
+                                    Toast.makeText(context, "Reporting...", Toast.LENGTH_SHORT).show();
+                                    Log.d("teste", "Report");
+
+                                    ParseObject inappropriateObject = new ParseObject("Innapropriate");
+                                    inappropriateObject.put("userObject", ParseUser.getCurrentUser());
+                                    inappropriateObject.put("problemObject", problem);
+                                    inappropriateObject.saveInBackground();
+                                    break;
+                            }
+                        }
+
+                        dialog.dismiss();
+                    }
+                }
+        );
+        builderSingle.show();
+    }
+
+    private void setProblemStatusCloud() {
+
+        String table = "ProblemStatus";
+        String attributeNameColumn;
+        final String userStatusColumn;
+        final String dateStatusColumn;
+
+        //if it is not solved
+        if (!isSolved) {
+            attributeNameColumn = "solved";
+            userStatusColumn = "solvedBy";
+            dateStatusColumn = "solvedAt";
+            this.isSolved = true;
+        } else {
+            attributeNameColumn = "unsolved";
+            userStatusColumn = "usolvedBy";
+            dateStatusColumn = "unsolvedAt";
+            this.isSolved = false;
+        }
+
+        setStatusLabel();
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(table);
+        query.whereEqualTo("name", attributeNameColumn);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> results, ParseException e) {
+                if (!results.isEmpty()) {
+                    Log.d("teste", "Solving");
+                    ParseObject problemAux = problem;
+                    problemAux.put("statusObject", results.get(0));
+                    Log.d("teste", "Status: " + results.get(0).get("name"));
+                    Log.d("teste", "ObjectID: " + problemAux.getObjectId());
+                    problemAux.put(userStatusColumn, ParseUser.getCurrentUser());
+                    problemAux.put(dateStatusColumn, DatePicker.getActualDateType());
+                    problemAux.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e != null) {
+                                Log.d("teste", "error :" + e);
+                            }
+                        }
+                    });
+                } else {
+                }
+            }
+        });
+    }
+
+    private void setStatusLabel() {
+        LinearLayout problemStatusContainer = (LinearLayout) findViewById(R.id.linearLayout_status_reportDescription);
+        TextView problemStatusField = (TextView) findViewById(R.id.textview_status_reportDescription);
+        if (isSolved) {
+            problemStatusContainer.setBackgroundColor(getResources().getColor(R.color.green_dark));
+            problemStatusField.setText("solved" + " " + DatePicker.getActualDate());
+        } else {
+            problemStatusContainer.setBackgroundColor(getResources().getColor(R.color.red_dark));
+            problemStatusField.setText("unsolved" + " " + DatePicker.getActualDate());
+        }
+    }
+
+    private void setIsBotheredCloud(){
+        if (!isBotheredInit && isBothered) {
             this.isBothered = true;
             ParseObject botheredObject = new ParseObject("ProblemSupport");
             botheredObject.put("userObject", ParseUser.getCurrentUser());
@@ -228,6 +372,12 @@ public class ReportDescriptionActivity extends Activity {
                 }
             });
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        setIsBotheredCloud();
     }
 
 }

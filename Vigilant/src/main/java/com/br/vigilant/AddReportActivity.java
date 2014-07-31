@@ -109,7 +109,7 @@ public class AddReportActivity extends Activity {
 
         //set the Address based on coordinate
         if (addresses.size() > 0) {
-            Log.d("adress: ", addresses.get(0).getAddressLine(0) + addresses.get(0).getAddressLine(1)+ addresses.get(0).getAddressLine(2));
+            Log.d("adress: ", addresses.get(0).getAddressLine(0) + addresses.get(0).getAddressLine(1)+ addresses.get(0));
             EditText editText_adress = (EditText) findViewById(R.id.address_report_input_edittext);
             editText_adress.setText(addresses.get(0).getAddressLine(0) + ", " + addresses.get(0).getAddressLine(1)+ ", " +addresses.get(0).getAddressLine(2));
         } else {
@@ -136,7 +136,6 @@ public class AddReportActivity extends Activity {
     public void categoryButtonClicked(View view) {
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(
                 this);
-        builderSingle.setIcon(R.drawable.ic_launcher);
         builderSingle.setTitle("Which category?");
 
         builderSingle.setNegativeButton("cancel",

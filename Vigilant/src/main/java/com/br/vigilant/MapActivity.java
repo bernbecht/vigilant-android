@@ -32,7 +32,6 @@ import java.util.Map;
 public class MapActivity extends Activity {
 
     public static Context context;
-
     public static Uri fileUri;
     private final static int
             CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
@@ -46,19 +45,21 @@ public class MapActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Log.d("life","onCreate");
+
         setContentView(R.layout.activity_map);
 
         MapActivity.context = getApplicationContext();
 
-        locationHandler = LocationHandler.getInstance();
-
-        try {
-            getAllProblemsFromCloud();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        mapInit();
+//        locationHandler = LocationHandler.getInstance();
+//
+//        try {
+//            getAllProblemsFromCloud();
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//
+//        mapInit();
 
     }
 
@@ -93,7 +94,7 @@ public class MapActivity extends Activity {
                 final LatLng problemPinCoord = new LatLng(problemCoord.getLatitude(), problemCoord.getLongitude());
                 //set category logo
                 Resources res = context.getResources();
-                int resID = res.getIdentifier(category.get("pinName").toString()+"_"+status.get("name"),
+                int resID = res.getIdentifier(category.get("pinName").toString()+"_"+status.get("name").toString(),
                         "drawable",
                         context.getPackageName());
                 Drawable drawable = res.getDrawable(resID);
@@ -132,13 +133,29 @@ public class MapActivity extends Activity {
     @Override
     public void onResume() {
         super.onResume();
+        Log.d("life","onResume");
+        locationHandler = LocationHandler.getInstance();
+
+        try {
+            getAllProblemsFromCloud();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        mapInit();
     }
+
+    @Override
+    public void onStart() {
+        Log.d("life","onStart");
+        super.onStart();
+    }
+
 
     public void changeListActivity(View view) {
         Intent cameraIntent = new Intent(this, AddReportActivity.class);
         startActivity(cameraIntent);
     }
-
 
     public void changeProfileActivity(View view) {
         Intent intent = new Intent(this, ProfileActivity.class);

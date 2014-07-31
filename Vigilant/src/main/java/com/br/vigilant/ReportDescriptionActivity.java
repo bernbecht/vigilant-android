@@ -129,6 +129,7 @@ public class ReportDescriptionActivity extends Activity {
 
             if (isBotheredInit) {
                 botheredButton.setBackground(getResources().getDrawable(R.drawable.bothered_button_clicked));
+                botheredButton.setPadding(14,7,14,7);
                 botheredButton.setText(getResources().getText(R.string.button_bothered_clicked_reportDescription));
                 isBothered = true;
             }

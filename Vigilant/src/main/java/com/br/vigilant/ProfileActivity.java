@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.br.utils.SharedPreferencesManager;
@@ -16,6 +17,8 @@ import com.br.adapter.AdapterProfileSettingsAuxList;
 import com.br.adapter.AdapterProfileSettingsList;
 import com.facebook.Session;
 import com.parse.ParseUser;
+
+import java.text.SimpleDateFormat;
 
 public class ProfileActivity extends Activity {
 
@@ -29,8 +32,19 @@ public class ProfileActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        ProfileActivity.context = getApplicationContext();
+        TextView nicknameField = (TextView) findViewById(R.id.textview_nickname_profile);
+        TextView emailField = (TextView) findViewById(R.id.textview_email_profile);
+        TextView otherDataField = (TextView) findViewById(R.id.textview_otherData_profile);
 
+        SimpleDateFormat df = new SimpleDateFormat("MMM dd, yyyy");
+
+        nicknameField.setText(ParseUser.getCurrentUser().get("nickname").toString());
+        emailField.setText(ParseUser.getCurrentUser().get("email").toString());
+        otherDataField.setText(ParseUser.getCurrentUser().get("location").toString() + " | User since " +
+                df.format(ParseUser.getCurrentUser().getCreatedAt()));
+
+
+        ProfileActivity.context = getApplicationContext();
 
         ListView l1 = (ListView) this.findViewById(R.id.list1);
         ListView l2 = (ListView) this.findViewById(R.id.list2);

@@ -28,7 +28,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/username_profile"
+                android:id="@+id/textview_nickname_profile"
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
                 android:text="Berhell"
@@ -37,7 +37,7 @@
                 android:textColor="#0071BC" />
 
             <TextView
-                android:id="@+id/email_profile"
+                android:id="@+id/textview_email_profile"
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
                 android:gravity="center"
@@ -45,7 +45,7 @@
                 android:textSize="17dp" />
 
             <TextView
-                android:id="@+id/city_profile"
+                android:id="@+id/textview_otherData_profile"
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
                 android:gravity="center"

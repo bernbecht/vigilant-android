@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.br.utils.ConnectionUtils;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -46,22 +47,26 @@ public class EditEmail extends Activity {
         boolean isValid = true;
         EditText newEmail = (EditText) findViewById(R.id.editText_editEmail_editEmail);
         ParseUser user = ParseUser.getCurrentUser();
-        if(emailPattern.matcher(newEmail.getText().toString()).matches()) {
-            Toast.makeText(context, "Saving...", Toast.LENGTH_SHORT).show();
-            user.put("email", newEmail.getText().toString());
-            user.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    if (e != null) {
-                        Log.d("Tag", "exception " + e);
+        if (ConnectionUtils.detectConnection(this)) {
+            if (emailPattern.matcher(newEmail.getText().toString()).matches()) {
+                Toast.makeText(context, "Saving...", Toast.LENGTH_SHORT).show();
+                user.put("email", newEmail.getText().toString());
+                user.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e != null) {
+                            Log.d("Tag", "exception " + e);
+                        }
                     }
-                }
-            });
-            finish();
+                });
+                finish();
+            } else {
+                Toast.makeText(context, "Email not valid!", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(context, "You are without connection. Try it again later.", Toast.LENGTH_LONG).show();
         }
-        else{
-            Toast.makeText(context, "Email not valid!", Toast.LENGTH_SHORT).show();
-        }
+
     }
 }
 

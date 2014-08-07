@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.br.adapter.AdapterCategoriesList;
 import com.br.adapter.AdapterMoreFeaturesList;
+import com.br.utils.ConnectionUtils;
 import com.br.utils.DatePicker;
 import com.parse.FindCallback;
 import com.parse.Parse;
@@ -191,28 +192,34 @@ public class ReportDescriptionActivity extends Activity {
     }
 
     public void addBothered(View v) {
-        Button botheredButton = (Button) findViewById(R.id.button_bothered_reportDescription);
-        TextView botheredLabel = (TextView) findViewById(R.id.textview_bothered_reportDescription);
-        String botheredLabelContent = botheredLabel.getText().toString();
-        String botheredLabelArray[] = botheredLabelContent.split(" ");
-        int botheredNumber = Integer.parseInt(botheredLabelArray[0]);
+        if(ConnectionUtils.detectConnection(this)){
+            Button botheredButton = (Button) findViewById(R.id.button_bothered_reportDescription);
+            TextView botheredLabel = (TextView) findViewById(R.id.textview_bothered_reportDescription);
+            String botheredLabelContent = botheredLabel.getText().toString();
+            String botheredLabelArray[] = botheredLabelContent.split(" ");
+            int botheredNumber = Integer.parseInt(botheredLabelArray[0]);
 
-        if (!isBothered) {
-            botheredNumber++;
-            botheredLabel.setText(botheredNumber + " bothered");
-            botheredButton.setBackground(getResources().getDrawable(R.drawable.bothered_button_clicked));
-            botheredButton.setPadding(14,7,14,7);
-            botheredButton.setText(getResources().getText(R.string.button_bothered_clicked_reportDescription));
+            if (!isBothered) {
+                botheredNumber++;
+                botheredLabel.setText(botheredNumber + " bothered");
+                botheredButton.setBackground(getResources().getDrawable(R.drawable.bothered_button_clicked));
+                botheredButton.setPadding(14,7,14,7);
+                botheredButton.setText(getResources().getText(R.string.button_bothered_clicked_reportDescription));
 
-            this.isBothered = true;
-        } else {
-            botheredNumber--;
-            botheredLabel.setText(botheredNumber + " bothered");
-            botheredButton.setBackground(getResources().getDrawable(R.drawable.bothered_button_normal));
-            botheredButton.setPadding(14,7,14,7);
-            botheredButton.setText(getResources().getText(R.string.button_bothered_normal_reportDescription));
-            isBothered = false;
+                this.isBothered = true;
+            } else {
+                botheredNumber--;
+                botheredLabel.setText(botheredNumber + " bothered");
+                botheredButton.setBackground(getResources().getDrawable(R.drawable.bothered_button_normal));
+                botheredButton.setPadding(14,7,14,7);
+                botheredButton.setText(getResources().getText(R.string.button_bothered_normal_reportDescription));
+                isBothered = false;
+            }
+        }else{
+            Toast.makeText(context, "You are without connection. Try it again later.",
+                    Toast.LENGTH_SHORT).show();
         }
+
     }
 
     public void showMoreFeaturesDialog(View v) {
@@ -238,42 +245,57 @@ public class ReportDescriptionActivity extends Activity {
                         if (!status.get("name").equals("solved")) {
                             switch (which) {
                                 case 0:
-                                    Toast.makeText(context, "Thank you", Toast.LENGTH_SHORT).show();
                                     Log.d("teste", "Solved");
-                                    setProblemStatusCloud();
+                                    if(ConnectionUtils.detectConnection(context)){
+                                        setProblemStatusCloud();
+                                        Toast.makeText(context, "Thank you", Toast.LENGTH_SHORT).show();
+                                    }else {
+                                        Toast.makeText(context, "You are without connection. Try it again later.",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
                                     break;
                                 case 1:
                                     Toast.makeText(context, "Sharing...", Toast.LENGTH_SHORT).show();
                                     Log.d("teste", "Facebook");
                                     break;
                                 case 2:
-                                    Toast.makeText(context, "Reporting...", Toast.LENGTH_SHORT).show();
+
                                     Log.d("teste", "Report");
-                                    ParseObject inappropriateObject = new ParseObject("Innapropriate");
-                                    inappropriateObject.put("userObject", ParseUser.getCurrentUser());
-                                    inappropriateObject.put("problemObject", problem);
-                                    inappropriateObject.saveInBackground();
+                                    if(ConnectionUtils.detectConnection(context)){
+                                        setInappropriate();
+                                        Toast.makeText(context, "Reporting...", Toast.LENGTH_SHORT).show();
+                                    }else {
+                                        Toast.makeText(context, "You are without connection. Try it again later.",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
                                     break;
                             }
                         } else {
                             switch (which) {
                                 case 0:
-                                    Toast.makeText(context, "Thank you", Toast.LENGTH_SHORT).show();
                                     Log.d("teste", "UnSolved");
-                                    setProblemStatusCloud();
+                                    if(ConnectionUtils.detectConnection(context)){
+                                        setProblemStatusCloud();
+                                        Toast.makeText(context, "Thank you", Toast.LENGTH_SHORT).show();
+                                    }else {
+                                        Toast.makeText(context, "You are without connection. Try it again later.",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
                                     break;
                                 case 1:
                                     Toast.makeText(context, "Sharing...", Toast.LENGTH_SHORT).show();
                                     Log.d("teste", "Facebook");
                                     break;
                                 case 2:
-                                    Toast.makeText(context, "Reporting...", Toast.LENGTH_SHORT).show();
-                                    Log.d("teste", "Report");
 
-                                    ParseObject inappropriateObject = new ParseObject("Innapropriate");
-                                    inappropriateObject.put("userObject", ParseUser.getCurrentUser());
-                                    inappropriateObject.put("problemObject", problem);
-                                    inappropriateObject.saveInBackground();
+                                    Log.d("teste", "Report");
+                                    if(ConnectionUtils.detectConnection(context)){
+                                        setInappropriate();
+                                        Toast.makeText(context, "Reporting...", Toast.LENGTH_SHORT).show();
+                                    }else {
+                                        Toast.makeText(context, "You are without connection. Try it again later.",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
                                     break;
                             }
                         }
@@ -373,6 +395,13 @@ public class ReportDescriptionActivity extends Activity {
                 }
             });
         }
+    }
+
+    private void setInappropriate(){
+        ParseObject inappropriateObject = new ParseObject("Innapropriate");
+        inappropriateObject.put("userObject", ParseUser.getCurrentUser());
+        inappropriateObject.put("problemObject", problem);
+        inappropriateObject.saveInBackground();
     }
 
     @Override

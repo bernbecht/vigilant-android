@@ -1,9 +1,9 @@
 package com.br.fragment;
 
-
+import android.app.Activity;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +11,7 @@ import android.view.ViewGroup;
 import com.br.vigilant.R;
 
 
-public class LoginFragment extends Fragment {
-
-    private static final String TAG = "LoginFragment";
-
+public class ConnectionErrorFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -22,7 +19,7 @@ public class LoginFragment extends Fragment {
 
 
 
-        View view = inflater.inflate(R.layout.fragment_login, container, false);
+        View view = inflater.inflate(R.layout.fragment_connection_error, container, false);
 
 //        LoginButton authButton = (LoginButton) view.findViewById(R.id.login_facebook_button);
 //        authButton.setFragment(this);
@@ -30,6 +27,5 @@ public class LoginFragment extends Fragment {
 
         return view;
     }
-
 
 }

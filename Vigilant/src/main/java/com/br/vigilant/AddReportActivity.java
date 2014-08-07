@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.br.adapter.AdapterCategoriesList;
 import com.br.utils.CacheObject;
+import com.br.utils.ConnectionUtils;
 import com.br.utils.LocationHandler;
 import com.br.utils.ParseUtils;
 import com.parse.FindCallback;
@@ -199,39 +200,46 @@ public class AddReportActivity extends Activity {
         if (category_id == null)
             isValid = false;
 
-        if (isValid) {
-            Toast.makeText(context, "Saving your report", Toast.LENGTH_SHORT).show();
+        if(ConnectionUtils.detectConnection(this)){
+            if (isValid) {
+                Toast.makeText(context, "Saving your report", Toast.LENGTH_SHORT).show();
 
-            //Compressing and manking a byte stream with the last photo
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            last_photo.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-            byte[] data = stream.toByteArray();
-            ParseFile image_file = new ParseFile(data);
+                //Compressing and manking a byte stream with the last photo
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                last_photo.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                byte[] data = stream.toByteArray();
+                ParseFile image_file = new ParseFile(data);
 
-            ParseObject new_report = new ParseObject("Problem");
-            new_report.put("description", description_field.getText().toString());
-            new_report.put("address", address_field.getText().toString());
-            new_report.put("problemCategory", actual_category);
-            new_report.put("statusObject", actual_problem_status);
-            new_report.put("coordinate", location);
-            new_report.put("userObject", ParseUser.getCurrentUser());
-            new_report.put("image", image_file);
-            new_report.put("innapropriate", false);
-            new_report.put("city", addresses.get(0).getAddressLine(1).toString());
-            new_report.put("country", addresses.get(0).getAddressLine(2).toString());
-            new_report.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    if (e != null) {
-                        Log.d("Tag", "exception " + e);
+                ParseObject new_report = new ParseObject("Problem");
+                new_report.put("description", description_field.getText().toString());
+                new_report.put("address", address_field.getText().toString());
+                new_report.put("problemCategory", actual_category);
+                new_report.put("statusObject", actual_problem_status);
+                new_report.put("coordinate", location);
+                new_report.put("userObject", ParseUser.getCurrentUser());
+                new_report.put("image", image_file);
+                new_report.put("innapropriate", false);
+                new_report.put("city", addresses.get(0).getAddressLine(1).toString());
+                new_report.put("country", addresses.get(0).getAddressLine(2).toString());
+                new_report.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e != null) {
+                            Log.d("Tag", "exception " + e);
+                        }
                     }
-                }
-            });
-            finish();
-        } else {
-            Toast.makeText(context, "Fill all the fields, please", Toast.LENGTH_SHORT).show();
+                });
+                finish();
+            } else {
+                Toast.makeText(context, "Please, fill all the fields", Toast.LENGTH_SHORT).show();
 
+            }
+        }else{
+            Toast.makeText(context, "You are without connection. Try it again later.",
+                    Toast.LENGTH_LONG).show();
         }
+
+
     }
 
     public Cursor findLastPicture() {

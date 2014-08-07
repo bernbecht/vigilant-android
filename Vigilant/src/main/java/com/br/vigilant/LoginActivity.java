@@ -8,7 +8,10 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
+import com.br.utils.ConnectionUtils;
+import com.br.utils.ParseUtils;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.model.GraphUser;
@@ -37,9 +40,7 @@ public class LoginActivity extends FragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Parse.initialize(this, "zmCTLzchKlxqd3r9ygqYZZYaQwKyzgpvTPhEtO5e", "sktKbehLkB8ukPjTHnVYeYg3kRVPicvviZXQC1kJ");
-
-        ParseFacebookUtils.initialize("684872108258145");
+        ParseUtils.ParseInit(this);
 
         LoginActivity.context = getApplicationContext();
 
@@ -54,99 +55,104 @@ public class LoginActivity extends FragmentActivity {
         });
 
 
-        if(ParseUser.getCurrentUser() != null){
-            if(ParseUser.getCurrentUser().get("nickname") != null){
-                Log.d(ACTIVITY_TAG,"Current user found and he has nickname: "+ParseUser.getCurrentUser().get("nickname"));
+        //If there is a actual User on the app
+        if (ParseUser.getCurrentUser() != null) {
+            if (ParseUser.getCurrentUser().get("nickname") != null) {
+                Log.d(ACTIVITY_TAG, "Current user found and he has nickname: " + ParseUser.getCurrentUser().get("nickname"));
                 Intent intent = new Intent(LoginActivity.context, MapActivity.class);
                 //make the previous this activity out of backstack
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
-            }
-            else{
+            } else {
                 Intent intent = new Intent(LoginActivity.context, CreateProfileActivity.class);
-                //make the previous this activity out of backstack
                 //make the previous this activity out of backstack
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             }
         }
-
-
     }
 
     private void onLoginButtonClicked() {
-        List<String> permissions = Arrays.asList("user_location", "user_birthday", "user_likes", "email");
-        ParseFacebookUtils.logIn(permissions, this, new LogInCallback() {
-            @Override
-            public void done(ParseUser user, ParseException err) {
-                if (user == null) {
-                    Log.d(ACTIVITY_TAG,
-                            "Uh oh. The user cancelled the Facebook login." + user);
-                } else if (user.isNew()) {
-                    Log.d(ACTIVITY_TAG,
-                            "User signed up and logged in through Facebook!" + user);
 
-                    Request request = Request.newMeRequest(ParseFacebookUtils.getSession(), new Request.GraphUserCallback() {
-                        @Override
-                        public void onCompleted(GraphUser user, Response response) {
+        if (ConnectionUtils.detectConnection(this)) {
+            List<String> permissions = Arrays.asList("user_location", "user_birthday", "user_likes", "email");
+            ParseFacebookUtils.logIn(permissions, this, new LogInCallback() {
+                @Override
+                public void done(ParseUser user, ParseException err) {
+                    if (user == null) {
+                        Log.d(ACTIVITY_TAG,
+                                "Uh oh. The user cancelled the Facebook login." + user);
+                    } else if (user.isNew()) {
+                        Log.d(ACTIVITY_TAG,
+                                "User signed up and logged in through Facebook!" + user);
 
-                            // If the response is successful
-                            if (user != null) {
+                        Request request = Request.newMeRequest(ParseFacebookUtils.getSession(), new Request.GraphUserCallback() {
+                            @Override
+                            public void onCompleted(GraphUser user, Response response) {
 
-                                LoginActivity.fb_user = user;
+                                // If the response is successful
+                                if (user != null) {
 
-                                Log.d(ACTIVITY_TAG, "user facebook " + user);
-                                Log.d(ACTIVITY_TAG, "user id: " + user.getId());
-                                Log.d(ACTIVITY_TAG, "Current user id: " + ParseUser.getCurrentUser().getObjectId());
+                                    LoginActivity.fb_user = user;
 
-                                ParseObject new_user = ParseUser.getCurrentUser();
+                                    Log.d(ACTIVITY_TAG, "user facebook " + user);
+                                    Log.d(ACTIVITY_TAG, "user id: " + user.getId());
+                                    Log.d(ACTIVITY_TAG, "Current user id: " + ParseUser.getCurrentUser().getObjectId());
 
-                                new_user.put("email", fb_user.asMap().get("email"));
-                                new_user.put("firstName", fb_user.getFirstName());
-                                new_user.put("lastName", fb_user.getLastName());
-                                new_user.put("facebookId", fb_user.getId());
-                                new_user.put("location", fb_user.getLocation().getProperty("name"));
-                                new_user.put("gender", fb_user.asMap().get("gender"));
+                                    ParseObject new_user = ParseUser.getCurrentUser();
 
-                                new_user.saveInBackground();
+                                    new_user.put("email", fb_user.asMap().get("email"));
+                                    new_user.put("firstName", fb_user.getFirstName());
+                                    new_user.put("lastName", fb_user.getLastName());
+                                    new_user.put("facebookId", fb_user.getId());
+                                    new_user.put("location", fb_user.getLocation().getProperty("name"));
+                                    new_user.put("gender", fb_user.asMap().get("gender"));
 
+                                    new_user.saveInBackground();
+
+                                }
                             }
-                        }
-                    });
-                    Request.executeBatchAsync(request);
+                        });
+                        Request.executeBatchAsync(request);
 
-
-                    Intent intent = new Intent(LoginActivity.context, CreateProfileActivity.class);
-                    //make the previous this activity out of backstack
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-
-                } else {
-                    Log.d(ACTIVITY_TAG,
-                            "User logged in through Facebook! " + user.getObjectId() + " " + user.isNew());
-                    Log.d(ACTIVITY_TAG,
-                            "Current user " + ParseUser.getCurrentUser());
-
-                    if (user.get("nickname") == null) {
 
                         Intent intent = new Intent(LoginActivity.context, CreateProfileActivity.class);
                         //make the previous this activity out of backstack
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
+
                     } else {
                         Log.d(ACTIVITY_TAG,
-                                "user nickname " + ParseUser.getCurrentUser().get("nickname"));
+                                "User logged in through Facebook! " + user.getObjectId() + " " + user.isNew());
+                        Log.d(ACTIVITY_TAG,
+                                "Current user " + ParseUser.getCurrentUser());
+
+                        if (user.get("nickname") == null) {
+
+                            Intent intent = new Intent(LoginActivity.context, CreateProfileActivity.class);
+                            //make the previous this activity out of backstack
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                        } else {
+                            Log.d(ACTIVITY_TAG,
+                                    "user nickname " + ParseUser.getCurrentUser().get("nickname"));
 
 
-                        Intent intent = new Intent(LoginActivity.context, MapActivity.class);
-                        //make the previous this activity out of backstack
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
+                            Intent intent = new Intent(LoginActivity.context, MapActivity.class);
+                            //make the previous this activity out of backstack
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                        }
+
                     }
-
                 }
-            }
-        });
+            });
+        } else {
+            Toast.makeText(context, "You are without connection. Try it again later.",
+                    Toast.LENGTH_LONG).show();
+        }
+
+
     }
 
     @Override

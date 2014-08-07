@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.br.utils.ParseUtils;
 import com.br.utils.SharedPreferencesManager;
 import com.br.adapter.AdapterProfileSettingsAuxList;
 import com.br.adapter.AdapterProfileSettingsList;
@@ -30,6 +31,7 @@ public class ProfileActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        ParseUtils.ParseInit(this);
         setContentView(R.layout.activity_profile);
 
         TextView nicknameField = (TextView) findViewById(R.id.textview_nickname_profile);

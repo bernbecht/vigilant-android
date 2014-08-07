@@ -8,7 +8,12 @@
         android:id="@+id/map"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        class="com.google.android.gms.maps.MapFragment" />
+        class="com.google.android.gms.maps.SupportMapFragment" />
+
+    <fragment android:name="com.br.fragment.ConnectionErrorFragment"
+        android:id="@+id/fragment_connection_lost"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <LinearLayout
         android:id="@+id/footer"

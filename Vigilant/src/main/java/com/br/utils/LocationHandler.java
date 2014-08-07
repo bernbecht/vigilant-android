@@ -60,8 +60,8 @@ public class LocationHandler implements
 
         Log.d("loc", "location: " + mCurrentLocation.getLatitude());
 
-        Toast.makeText(context, "Connected " + mCurrentLocation.getLatitude() + ","
-                + mCurrentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(context, "Connected " + mCurrentLocation.getLatitude() + ","
+//                + mCurrentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
 
     }
 

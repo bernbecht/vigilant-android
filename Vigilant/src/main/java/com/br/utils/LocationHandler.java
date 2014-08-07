@@ -63,7 +63,6 @@ public class LocationHandler implements
         Toast.makeText(context, "Connected " + mCurrentLocation.getLatitude() + ","
                 + mCurrentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
 
-
     }
 
     /*

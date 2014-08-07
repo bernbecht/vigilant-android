@@ -39,7 +39,6 @@ public class LoginActivity extends FragmentActivity {
 
         Parse.initialize(this, "zmCTLzchKlxqd3r9ygqYZZYaQwKyzgpvTPhEtO5e", "sktKbehLkB8ukPjTHnVYeYg3kRVPicvviZXQC1kJ");
 
-
         ParseFacebookUtils.initialize("684872108258145");
 
         LoginActivity.context = getApplicationContext();

@@ -69,6 +69,7 @@ public class ProfileActivity extends Activity {
 
             if (position == 0) {
                 Intent intent = new Intent(ProfileActivity.context, EditEmail.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
             } else if (position == 1) {
 //                Intent intent = new Intent(ProfileActivity.context, EditPassword.class);
@@ -91,7 +92,6 @@ public class ProfileActivity extends Activity {
 
             if (position == 0) {
                 logout();
-
                 Intent intent = new Intent(ProfileActivity.context, LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);

@@ -12,6 +12,7 @@ import android.view.View;
 
 import com.br.utils.CameraUtils;
 import com.br.utils.LocationHandler;
+import com.br.utils.ParseUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -19,7 +20,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
@@ -137,7 +137,8 @@ public class MapActivity extends Activity {
         super.onResume();
         Log.d("life","onResume");
         locationHandler = LocationHandler.getInstance();
-
+        ParseUtils.ParseInit(this);
+        
         try {
             getAllProblemsFromCloud();
         } catch (ParseException e) {
@@ -161,6 +162,7 @@ public class MapActivity extends Activity {
 
     public void changeProfileActivity(View view) {
         Intent intent = new Intent(this, ProfileActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
     }
 

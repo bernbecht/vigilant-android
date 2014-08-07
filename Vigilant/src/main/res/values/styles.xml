@@ -5,12 +5,16 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <!--Removing transitions between activities-->
+    <!--<style name="noAnimTheme" parent="android:Theme">-->
+        <!--<item name="android:windowAnimationStyle">@null</item>-->
+    <!--</style>-->
+
     <style name="Theme.FullScreen" parent="@android:style/Theme.Holo.Light.NoActionBar"></style>
 
     <style name="VigilantTheme"
         parent="@android:style/Theme.Holo.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/VigilantActionBar</item>
-
     </style>
 
     <!-- ActionBar styles -->
@@ -67,7 +71,6 @@
         <item name="android:background">#00000000</item>
         
     </style>
-
 
     <style name="TextArea_canvas_vigilant">
         <item name="android:layout_marginLeft">@dimen/vigilant_object_horizontal_margin_root_layout</item>

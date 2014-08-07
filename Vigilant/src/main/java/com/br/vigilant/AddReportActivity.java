@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.br.adapter.AdapterCategoriesList;
 import com.br.utils.CacheObject;
 import com.br.utils.LocationHandler;
+import com.br.utils.ParseUtils;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -60,6 +61,8 @@ public class AddReportActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ParseUtils.ParseInit(this);
 
         ParseQuery<ParseObject> categories_problem = ParseQuery.getQuery("ProblemCategory");
         categories_problem.findInBackground(new FindCallback<ParseObject>() {

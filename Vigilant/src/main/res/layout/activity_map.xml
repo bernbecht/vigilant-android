@@ -18,7 +18,6 @@
         android:layout_alignParentBottom="true"
         style="@style/SplitActionBar_Vigilant">
 
-
         <ImageButton
             android:id="@+id/list_problem_button"
             android:layout_width="0dp"

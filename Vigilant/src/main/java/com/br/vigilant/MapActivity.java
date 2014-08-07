@@ -12,7 +12,6 @@ import android.view.View;
 
 import com.br.utils.CameraUtils;
 import com.br.utils.LocationHandler;
-import com.br.utils.ParseUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -137,8 +136,9 @@ public class MapActivity extends Activity {
         super.onResume();
         Log.d("life","onResume");
         locationHandler = LocationHandler.getInstance();
-        ParseUtils.ParseInit(this);
-        
+
+
+
         try {
             getAllProblemsFromCloud();
         } catch (ParseException e) {
